@@ -1,104 +1,180 @@
-// 1. PRODUCT DATA
-const products = [
-    { id: 1, name: "Wireless Headphones", price: 2500, image: "https://via.placeholder.com/150" },
-    { id: 2, name: "Gaming Mouse", price: 1200, image: "https://via.placeholder.com/150" },
-    { id: 3, name: "Mechanical Keyboard", price: 4500, image: "https://via.placeholder.com/150" }
-];
+/* * JHOLA SHOP APPLICATION
+ * Updated with Function Concepts: Arrow, Parameterized, & Helper Functions
+ */
 
-// 2. DISPLAY PRODUCTS
-// Function to generate the HTML for the shop
-function displayProducts() {
-    const container = document.getElementById("container");
+const app = {
+    products: [
+        { id: 1, name: "Wireless Headphones", price: 3500, category: "Audio", inStock: true, image: "https://via.placeholder.com/250x200?text=Headphones" },
+        { id: 2, name: "Gaming Mouse", price: 1200, category: "Accessories", inStock: true, image: "https://via.placeholder.com/250x200?text=Mouse" },
+        { id: 3, name: "Mechanical Keyboard", price: 4500, category: "Accessories", inStock: false, image: "https://via.placeholder.com/250x200?text=Keyboard" },
+        { id: 4, name: "USB-C Hub", price: 2000, category: "Accessories", inStock: true, image: "https://via.placeholder.com/250x200?text=USB+Hub" },
+        { id: 5, name: "Laptop Stand", price: 1500, category: "Furniture", inStock: true, image: "https://via.placeholder.com/250x200?text=Stand" },
+        { id: 6, name: "Webcam 1080p", price: 3200, category: "Electronics", inStock: true, image: "https://via.placeholder.com/250x200?text=Webcam" }
+    ],
     
-    // Clear the "Loading products..." text seen in your screenshot
-    container.innerHTML = ""; 
+    cart: [],
 
-    products.forEach((product) => {
-        // CONCEPT A: Use <article> for self-contained content [cite: 48]
-        const card = document.createElement("article"); 
-        card.classList.add("product-card");
-        card.innerHTML = `
-            <figure style="margin:0; padding:0;">
-                <img src="${product.image}" alt="${product.name}" style="width:100%">
-                
-                <figcaption style="font-size: 0.8rem; color: #777; margin-top: 5px;">
-                    Best Seller
-                </figcaption>
-            </figure>
-            
-            <h3>${product.name}</h3>
-            <p>
-    <span class="old-price">Rs. ${product.price + 500}</span>
-    Rs. ${product.price}
-</p>
-            <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
-        `;
+    // --- NEW: ARROW FUNCTION [cite: 1917, 1922] ---
+    // A concise function to format money consistently.
+    // Example: 3500 -> "Rs. 3,500"
+    formatCurrency: (amount) => {
+        return "Rs. " + amount.toLocaleString(); 
+    },
+
+    // --- NEW: PARAMETERIZED FUNCTION [cite: 1856, 1871] ---
+    // Takes a price and a tax rate, returns the tax amount.
+    calculateTax: function(amount, taxRate) {
+        return amount * taxRate;
+    },
+
+    init: function() {
+        this.displayProducts("All"); 
+        this.setupFilters();         
+        console.log("Jhola Shop Initialized");
+    },
+
+    setupFilters: function() {
+        const categories = ["All", ...new Set(this.products.map(p => p.category))];
+        const filterContainer = document.getElementById("filter-buttons");
+        if(!filterContainer) return; 
+
+        filterContainer.innerHTML = "";
         
+        categories.forEach(cat => {
+            const btn = document.createElement("button");
+            btn.textContent = cat;
+            // Using Arrow Function callback
+            btn.onclick = () => this.displayProducts(cat);
+            filterContainer.appendChild(btn);
+        });
+    },
+
+    displayProducts: function(filterCategory) {
+        const container = document.getElementById("container");
+        container.innerHTML = ""; 
+
+        const filteredList = filterCategory === "All" 
+            ? this.products 
+            : this.products.filter(p => p.category === filterCategory);
         
-        container.appendChild(card);
-    });
-}
+        // Loop Optimization
+        const len = filteredList.length;
 
-// 3. CART LOGIC (With Web Storage)
-function addToCart(name, price) {
-    // Get existing cart or create a new one
-    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
+        for (let i = 0; i < len; i++) {
+            const product = filteredList[i];
+            const card = document.createElement("article");
+            card.classList.add("product-card");
 
-    // Add new item
-    cart.push({ name, price });
+            const oldPrice = product.price + 500; 
+            const buttonState = product.inStock ? "" : "disabled";
+            const buttonText = product.inStock ? "Add to Cart" : "Out of Stock";
+            const buttonColor = product.inStock ? "" : "background-color: #ccc; cursor: not-allowed;";
 
-    // Save back to Web Storage
-    localStorage.setItem("myCart", JSON.stringify(cart));
+            card.innerHTML = `
+                <figure>
+                    <img src="${product.image}" alt="${product.name}">
+                    <figcaption style="font-size:0.8rem; color:#777; margin-top:5px;">
+                        ${product.category}
+                    </figcaption>
+                </figure>
+                <h3>${product.name}</h3>
+                <p>
+                    <span class="old-price">${this.formatCurrency(oldPrice)}</span>
+                    <strong>${this.formatCurrency(product.price)}</strong>
+                </p>
+                <button 
+                    onclick="app.addToCart(${product.id})" 
+                    ${buttonState} 
+                    style="${buttonColor}"
+                >
+                    ${buttonText}
+                </button>
+            `;
 
-    // Show feedback
-    alert(name + " added to cart!");
-    
-    // Update the table immediately so you see the item!
-    updateCartTable(); 
-}
-
-// 4. UPDATE TABLE FUNCTION
-function updateCartTable() {
-    const tbody = document.getElementById("cart-items");
-    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
-    
-    tbody.innerHTML = ""; // Clear current table so we don't list duplicates
-
-    cart.forEach((item) => {
-        let row = `<tr>
-            <td>${item.name}</td>
-            <td>1</td>
-            <td>${item.price}</td>
-        </tr>`;
-        tbody.innerHTML += row;
-    });
-}
-
-// --- INITIALIZE THE SHOP ---
-displayProducts();  // Load the products on screen
-updateCartTable();  // Load the cart from storage (if any items exist)
-
-// PART 5: Form Validation (From PDF: "Practical Example: Form Validation")
-function validateForm() {
-    const nameField = document.getElementById("name");
-    const emailField = document.getElementById("email");
-    const phoneField = document.getElementById("phone"); // NEW
-    const msgField = document.getElementById("comments");
-
-    if (nameField.value === "" || emailField.value === "" || msgField.value === "") {
-        alert("Please fill in the required fields (Name, Email, Message)!");
-    } else {
-        // We include the phone number in the success message if provided
-        let message = "Thank you, " + nameField.value + "!";
-        if(phoneField.value) {
-            message += " We will text updates to " + phoneField.value + ".";
+            container.appendChild(card);
         }
-        alert(message);
-        
-        // Clear fields
-        nameField.value = "";
-        emailField.value = "";
-        phoneField.value = "";
-        msgField.value = "";
+    },
+
+    addToCart: function(productId) {
+        const product = this.products.find(p => p.id === productId);
+        if (product && product.inStock) {
+            this.cart.push(product);
+            this.updateCartDisplay();
+            // Optional: You could use a toast notification here instead of alert
+        }
+    },
+
+    removeFromCart: function(index) {
+        this.cart.splice(index, 1);
+        this.updateCartDisplay();
+    },
+
+    updateCartDisplay: function() {
+        const cartTableBody = document.getElementById("cart-items");
+        cartTableBody.innerHTML = "";
+
+        let subTotal = 0;
+        const len = this.cart.length;
+
+        for (let i = 0; i < len; i++) {
+            const item = this.cart[i];
+            subTotal += item.price;
+            
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${item.name}</td>
+                <td>1</td>
+                <td>${this.formatCurrency(item.price)}</td>
+                <td>
+                    <button class="remove-btn" onclick="app.removeFromCart(${i})">Remove</button>
+                </td>
+            `;
+            cartTableBody.appendChild(row);
+        }
+
+        // --- NEW LOGIC: Calculate Tax & Total ---
+        if (this.cart.length > 0) {
+            // Using our PARAMETERIZED FUNCTION (13% Tax)
+            const taxAmount = this.calculateTax(subTotal, 0.13); 
+            const grandTotal = subTotal + taxAmount;
+
+            // Row 1: Subtotal
+            const subRow = document.createElement("tr");
+            subRow.innerHTML = `<td colspan="2" style="text-align:right;">Subtotal:</td><td colspan="2">${this.formatCurrency(subTotal)}</td>`;
+            
+            // Row 2: Tax
+            const taxRow = document.createElement("tr");
+            taxRow.innerHTML = `<td colspan="2" style="text-align:right;">Tax (13%):</td><td colspan="2">${this.formatCurrency(taxAmount)}</td>`;
+
+            // Row 3: Grand Total
+            const totalRow = document.createElement("tr");
+            totalRow.classList.add("total-row");
+            totalRow.style.fontWeight = "bold";
+            totalRow.innerHTML = `
+                <td colspan="2" style="text-align:right;">Grand Total:</td>
+                <td colspan="2">${this.formatCurrency(grandTotal)}</td>
+            `;
+
+            cartTableBody.appendChild(subRow);
+            cartTableBody.appendChild(taxRow);
+            cartTableBody.appendChild(totalRow);
+        }
+    },
+
+    validateForm: function() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        if (name === "" || email === "") {
+            alert("Please fill in required fields.");
+            return;
+        }
+        alert(`Thank you, ${name}!`);
+        document.querySelector("form").reset();
     }
-}
+};
+
+// --- NEW: IIFE (Immediately Invoked Function Expression)  ---
+// This runs automatically to start the app, keeping the global scope clean.
+(function() {
+    app.init();
+})();

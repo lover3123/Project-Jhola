@@ -204,3 +204,41 @@ footer {
         margin-top: 10px;
     }
 }
+/* --- FILTER BUTTON STYLES (Fixing the "Blocky" look) --- */
+
+/* 1. Layout: Put them side-by-side */
+#filter-buttons {
+    display: flex;
+    flex-wrap: wrap; /* Allows them to drop to next line on phone */
+    gap: 10px;       /* Space between buttons */
+    margin-bottom: 20px;
+}
+
+/* 2. Style: Make them look like "Tabs" or "Pills" */
+#filter-buttons button {
+    background-color: #e0e0e0; /* Light Grey (Neutral) */
+    color: #333;               /* Dark Text */
+    border: 1px solid #ccc;
+    padding: 8px 16px;         /* Smaller, sleeker padding */
+    border-radius: 20px;       /* "Pill" shape */
+    font-size: 0.9rem;
+    margin: 0;                 /* Remove the top margin */
+    
+    /* Reset the flex centering we added to global buttons */
+    display: inline-block;
+}
+
+/* 3. Interactive State */
+#filter-buttons button:hover {
+    background-color: #2c3e50; /* Dark Blue on hover */
+    color: white;
+    border-color: #2c3e50;
+    transform: translateY(-2px); /* Tiny lift */
+}
+
+/* Optional: Style the "Active" button if you want later */
+#filter-buttons button:focus {
+    background-color: #2c3e50;
+    color: white;
+    outline: none;
+}

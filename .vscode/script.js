@@ -77,20 +77,25 @@ updateCartTable();  // Load the cart from storage (if any items exist)
 
 // PART 5: Form Validation (From PDF: "Practical Example: Form Validation")
 function validateForm() {
-    // 1. Retrieval: Get the input element (PDF Concept)
     const nameField = document.getElementById("name");
     const emailField = document.getElementById("email");
+    const phoneField = document.getElementById("phone"); // NEW
     const msgField = document.getElementById("comments");
 
-    // 2. Logic: Check if fields are empty (PDF Concept)
     if (nameField.value === "" || emailField.value === "" || msgField.value === "") {
-        // 3. Feedback: Alert the user (PDF Concept)
-        alert("Please fill in all fields before sending!");
+        alert("Please fill in the required fields (Name, Email, Message)!");
     } else {
-        alert("Thank you, " + nameField.value + "! We have received your message.");
-        // Optional: Clear the form after sending
+        // We include the phone number in the success message if provided
+        let message = "Thank you, " + nameField.value + "!";
+        if(phoneField.value) {
+            message += " We will text updates to " + phoneField.value + ".";
+        }
+        alert(message);
+        
+        // Clear fields
         nameField.value = "";
         emailField.value = "";
+        phoneField.value = "";
         msgField.value = "";
     }
 }

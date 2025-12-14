@@ -137,3 +137,32 @@ input, textarea {
         margin-bottom: 20px;
     }
 }
+/* Styling the Fieldset (From 'additional html tags.pdf') */
+fieldset {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+
+/* Styling the Legend Title */
+legend {
+    font-weight: bold;
+    color: #2c3e50;
+    padding: 0 10px; /* Adds space around the text on the border line */
+    font-size: 1.1rem;
+}
+
+/* Update Input Styles to include the new 'tel' type */
+input[type="text"], 
+input[type="email"], 
+input[type="tel"], /* <--- ADDED THIS NEW TYPE */
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

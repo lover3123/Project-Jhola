@@ -27,7 +27,10 @@ function displayProducts() {
             </figure>
             
             <h3>${product.name}</h3>
-            <p>Rs. ${product.price}</p>
+            <p>
+    <span class="old-price">Rs. ${product.price + 500}</span>
+    Rs. ${product.price}
+</p>
             <button onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
         `;
         

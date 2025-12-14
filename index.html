@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jhola</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="description" content="Jhola Shop - The best electronics store in Nepal.">
+    <meta name="description" content="Jhola Shop - Best electronics in Nepal.">
+    <meta name="author" content="Jhola Shop Team"> 
 </head>
 <body>
     
@@ -21,16 +22,16 @@
     </header>
 
     <main>
-        <section id="shop-layout" style="display: flex; gap: 20px;">
+        <section id="shop-layout">
             
-            <div id="product-list" style="flex: 3;"> 
+            <div id="product-list"> 
                 <h2>Featured Items</h2>
                 <div id="container">
                     <p>Loading products...</p>
                 </div>
             </div>
 
-            <aside style="flex: 1; background: #fff; padding: 15px; height: fit-content; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <aside>
                 <h3>Special Offers</h3>
                 <p>Get 10% off on all electronics this week!</p>
                 <hr>
@@ -62,7 +63,7 @@
             <form action="/submit-feedback" method="POST">
                 <fieldset>
                     <legend>Send us a message</legend>
-            
+                    
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" placeholder="Enter your name" required>
             
@@ -75,7 +76,7 @@
                     <label for="comments">Message:</label>
                     <textarea id="comments" name="comments" rows="4" placeholder="How can we help?"></textarea>
             
-                    <button type="button" onclick="validateForm()">Send Message</button>
+                    <button type="button" onclick="app.validateForm()">Send Message</button>
                 </fieldset>
             </form>
         </section>
@@ -83,7 +84,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2025 My E-Commerce Store. All rights reserved.</p>
+        <p>&copy; 2025 Jhola Shop. All rights reserved.</p>
     </footer>
 
     <script src="script.js"></script>

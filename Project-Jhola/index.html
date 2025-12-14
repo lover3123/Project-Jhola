@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jhola</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Jhola Shop - The best electronics store in Nepal.">
+</head>
+<body>
+    
+    <header>
+        <nav>
+            <h1>Jhola Shop</h1>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#cart-section">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="shop-layout" style="display: flex; gap: 20px;">
+            
+            <div id="product-list" style="flex: 3;"> 
+                <h2>Featured Items</h2>
+                <div id="container">
+                    <p>Loading products...</p>
+                </div>
+            </div>
+
+            <aside style="flex: 1; background: #fff; padding: 15px; height: fit-content; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                <h3>Special Offers</h3>
+                <p>Get 10% off on all electronics this week!</p>
+                <hr>
+                <h4>New Arrivals</h4>
+                <p>Check out the new mechanical keyboards.</p>
+            </aside>
+
+        </section>
+
+        <hr> 
+
+        <section id="cart-section">
+            <h2>Your Shopping Cart</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Product Name</th> 
+                        <th>Quantity</th> 
+                        <th>Price (Rs.)</th> 
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
+                    </tbody>
+            </table>
+        </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <form action="/submit-feedback" method="POST">
+                <fieldset>
+                    <legend>Send us a message</legend>
+            
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+            
+                    <label for="comments">Message:</label>
+                    <textarea id="comments" name="comments" rows="4" placeholder="How can we help?"></textarea>
+            
+                    <button type="button" onclick="validateForm()">Send Message</button>
+                </fieldset>
+            </form>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 My E-Commerce Store. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

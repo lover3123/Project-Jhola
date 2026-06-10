@@ -1,180 +1,41 @@
-/* * JHOLA SHOP APPLICATION
- * Updated with Function Concepts: Arrow, Parameterized, & Helper Functions
+/* 
+ * JHOLA SHOP APPLICATION - ENHANCED VERSION
  */
 
 const app = {
     products: [
-        { id: 1, name: "Wireless Headphones", price: 3500, category: "Audio", inStock: true, image: "https://via.placeholder.com/250x200?text=Headphones" },
-        { id: 2, name: "Gaming Mouse", price: 1200, category: "Accessories", inStock: true, image: "https://via.placeholder.com/250x200?text=Mouse" },
-        { id: 3, name: "Mechanical Keyboard", price: 4500, category: "Accessories", inStock: false, image: "https://via.placeholder.com/250x200?text=Keyboard" },
-        { id: 4, name: "USB-C Hub", price: 2000, category: "Accessories", inStock: true, image: "https://via.placeholder.com/250x200?text=USB+Hub" },
-        { id: 5, name: "Laptop Stand", price: 1500, category: "Furniture", inStock: true, image: "https://via.placeholder.com/250x200?text=Stand" },
-        { id: 6, name: "Webcam 1080p", price: 3200, category: "Electronics", inStock: true, image: "https://via.placeholder.com/250x200?text=Webcam" }
+        { id: 1, name: "Wireless Headphones", price: 3500, category: "Audio", inStock: true, image: "https://via.placeholder.com/250x200?text=Headphones", description: "Premium wireless headphones with noise cancellation." },
+        { id: 2, name: "Gaming Mouse", price: 1200, category: "Accessories", inStock: true, image: "https://via.placeholder.com/250x200?text=Mouse", description: "High-precision gaming mouse with RGB lighting." },
+        { id: 3, name: "Mechanical Keyboard", price: 4500, category: "Accessories", inStock: false, image: "https://via.placeholder.com/250x200?text=Keyboard", description: "Mechanical keyboard with Cherry MX switches." },
+        { id: 4, name: "USB-C Hub", price: 2000, category: "Accessories", inStock: true, image: "https://via.placeholder.com/250x200?text=USB+Hub", description: "7-in-1 USB-C hub with HDMI and SD reader." },
+        { id: 5, name: "Laptop Stand", price: 1500, category: "Furniture", inStock: true, image: "https://via.placeholder.com/250x200?text=Stand", description: "Ergonomic aluminum laptop stand." },
+        { id: 6, name: "Webcam 1080p", price: 3200, category: "Electronics", inStock: true, image: "https://via.placeholder.com/250x200?text=Webcam", description: "Full HD webcam with built-in microphone." }
     ],
-    
     cart: [],
-
-    // --- NEW: ARROW FUNCTION [cite: 1917, 1922] ---
-    // A concise function to format money consistently.
-    // Example: 3500 -> "Rs. 3,500"
-    formatCurrency: (amount) => {
-        return "Rs. " + amount.toLocaleString(); 
-    },
-
-    // --- NEW: PARAMETERIZED FUNCTION [cite: 1856, 1871] ---
-    // Takes a price and a tax rate, returns the tax amount.
-    calculateTax: function(amount, taxRate) {
-        return amount * taxRate;
-    },
-
-    init: function() {
-        this.displayProducts("All"); 
-        this.setupFilters();         
-        console.log("Jhola Shop Initialized");
-    },
-
-    setupFilters: function() {
-        const categories = ["All", ...new Set(this.products.map(p => p.category))];
-        const filterContainer = document.getElementById("filter-buttons");
-        if(!filterContainer) return; 
-
-        filterContainer.innerHTML = "";
-        
-        categories.forEach(cat => {
-            const btn = document.createElement("button");
-            btn.textContent = cat;
-            // Using Arrow Function callback
-            btn.onclick = () => this.displayProducts(cat);
-            filterContainer.appendChild(btn);
-        });
-    },
-
-    displayProducts: function(filterCategory) {
-        const container = document.getElementById("container");
-        container.innerHTML = ""; 
-
-        const filteredList = filterCategory === "All" 
-            ? this.products 
-            : this.products.filter(p => p.category === filterCategory);
-        
-        // Loop Optimization
-        const len = filteredList.length;
-
-        for (let i = 0; i < len; i++) {
-            const product = filteredList[i];
-            const card = document.createElement("article");
-            card.classList.add("product-card");
-
-            const oldPrice = product.price + 500; 
-            const buttonState = product.inStock ? "" : "disabled";
-            const buttonText = product.inStock ? "Add to Cart" : "Out of Stock";
-            const buttonColor = product.inStock ? "" : "background-color: #ccc; cursor: not-allowed;";
-
-            card.innerHTML = `
-                <figure>
-                    <img src="${product.image}" alt="${product.name}">
-                    <figcaption style="font-size:0.8rem; color:#777; margin-top:5px;">
-                        ${product.category}
-                    </figcaption>
-                </figure>
-                <h3>${product.name}</h3>
-                <p>
-                    <span class="old-price">${this.formatCurrency(oldPrice)}</span>
-                    <strong>${this.formatCurrency(product.price)}</strong>
-                </p>
-                <button 
-                    onclick="app.addToCart(${product.id})" 
-                    ${buttonState} 
-                    style="${buttonColor}"
-                >
-                    ${buttonText}
-                </button>
-            `;
-
-            container.appendChild(card);
-        }
-    },
-
-    addToCart: function(productId) {
-        const product = this.products.find(p => p.id === productId);
-        if (product && product.inStock) {
-            this.cart.push(product);
-            this.updateCartDisplay();
-            // Optional: You could use a toast notification here instead of alert
-        }
-    },
-
-    removeFromCart: function(index) {
-        this.cart.splice(index, 1);
-        this.updateCartDisplay();
-    },
-
-    updateCartDisplay: function() {
-        const cartTableBody = document.getElementById("cart-items");
-        cartTableBody.innerHTML = "";
-
-        let subTotal = 0;
-        const len = this.cart.length;
-
-        for (let i = 0; i < len; i++) {
-            const item = this.cart[i];
-            subTotal += item.price;
-            
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${item.name}</td>
-                <td>1</td>
-                <td>${this.formatCurrency(item.price)}</td>
-                <td>
-                    <button class="remove-btn" onclick="app.removeFromCart(${i})">Remove</button>
-                </td>
-            `;
-            cartTableBody.appendChild(row);
-        }
-
-        // --- NEW LOGIC: Calculate Tax & Total ---
-        if (this.cart.length > 0) {
-            // Using our PARAMETERIZED FUNCTION (13% Tax)
-            const taxAmount = this.calculateTax(subTotal, 0.13); 
-            const grandTotal = subTotal + taxAmount;
-
-            // Row 1: Subtotal
-            const subRow = document.createElement("tr");
-            subRow.innerHTML = `<td colspan="2" style="text-align:right;">Subtotal:</td><td colspan="2">${this.formatCurrency(subTotal)}</td>`;
-            
-            // Row 2: Tax
-            const taxRow = document.createElement("tr");
-            taxRow.innerHTML = `<td colspan="2" style="text-align:right;">Tax (13%):</td><td colspan="2">${this.formatCurrency(taxAmount)}</td>`;
-
-            // Row 3: Grand Total
-            const totalRow = document.createElement("tr");
-            totalRow.classList.add("total-row");
-            totalRow.style.fontWeight = "bold";
-            totalRow.innerHTML = `
-                <td colspan="2" style="text-align:right;">Grand Total:</td>
-                <td colspan="2">${this.formatCurrency(grandTotal)}</td>
-            `;
-
-            cartTableBody.appendChild(subRow);
-            cartTableBody.appendChild(taxRow);
-            cartTableBody.appendChild(totalRow);
-        }
-    },
-
-    validateForm: function() {
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        if (name === "" || email === "") {
-            alert("Please fill in required fields.");
-            return;
-        }
-        alert(`Thank you, ${name}!`);
-        document.querySelector("form").reset();
-    }
+    currentFilter: "All",
+    currentSort: "default",
+    searchQuery: "",
+    formatCurrency: (amount) => "Rs. " + amount.toLocaleString(),
+    calculateTax: function(amount, taxRate) { return amount * taxRate; },
+    init: function() { this.loadCartFromStorage(); this.displayProducts("All"); this.setupFilters(); this.setupSearchAndSort(); this.setupEventListeners(); this.updateCartBadge(); this.updateCartDisplay(); },
+    setupFilters: function() { const categories = ["All", ...new Set(this.products.map(p => p.category))]; const filterContainer = document.getElementById("filter-buttons"); if(!filterContainer) return; filterContainer.innerHTML = ""; categories.forEach(cat => { const btn = document.createElement("button"); btn.textContent = cat; btn.setAttribute('aria-pressed', cat === "All" ? "true" : "false"); if (cat === "All") btn.classList.add('active'); btn.onclick = () => { document.querySelectorAll('#filter-buttons button').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); }); btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); this.currentFilter = cat; this.displayProducts(cat); }; filterContainer.appendChild(btn); }); },
+    setupSearchAndSort: function() { const searchInput = document.getElementById('search-input'); const sortSelect = document.getElementById('sort-select'); if (searchInput) { searchInput.addEventListener('input', (e) => { this.searchQuery = e.target.value.toLowerCase(); this.displayProducts(this.currentFilter); }); } if (sortSelect) { sortSelect.addEventListener('change', (e) => { this.currentSort = e.target.value; this.displayProducts(this.currentFilter); }); } },
+    setupEventListeners: function() { document.querySelectorAll('.close-modal').forEach(btn => { btn.addEventListener('click', () => { this.closeModal('checkout-modal'); this.closeModal('product-modal'); }); }); window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) this.closeModal(e.target.id); }); const checkoutBtn = document.getElementById('checkout-btn'); if (checkoutBtn) checkoutBtn.addEventListener('click', () => this.openCheckout()); const clearCartBtn = document.getElementById('clear-cart-btn'); if (clearCartBtn) clearCartBtn.addEventListener('click', () => this.clearCart()); const checkoutForm = document.getElementById('checkout-form'); if (checkoutForm) checkoutForm.addEventListener('submit', (e) => this.handleCheckout(e)); const contactForm = document.getElementById('contact-form'); if (contactForm) contactForm.addEventListener('submit', (e) => this.handleContact(e)); const cartBadge = document.getElementById('cart-badge'); if (cartBadge) cartBadge.addEventListener('click', () => { document.getElementById('cart-section').scrollIntoView({ behavior: 'smooth' }); }); },
+    displayProducts: function(filterCategory) { const container = document.getElementById("container"); if (!container) return; container.innerHTML = ""; let filteredList = filterCategory === "All" ? this.products : this.products.filter(p => p.category === filterCategory); if (this.searchQuery) { filteredList = filteredList.filter(p => p.name.toLowerCase().includes(this.searchQuery) || p.description.toLowerCase().includes(this.searchQuery)); } switch(this.currentSort) { case 'price-low': filteredList.sort((a, b) => a.price - b.price); break; case 'price-high': filteredList.sort((a, b) => b.price - a.price); break; case 'name-asc': filteredList.sort((a, b) => a.name.localeCompare(b.name)); break; case 'name-desc': filteredList.sort((a, b) => b.name.localeCompare(a.name)); break; } if (filteredList.length === 0) { container.innerHTML = '<p>No products found.</p>'; return; } filteredList.forEach(product => { const card = document.createElement("article"); card.classList.add("product-card"); const oldPrice = product.price + 500; const buttonState = product.inStock ? "" : "disabled"; const buttonText = product.inStock ? "Add to Cart" : "Out of Stock"; card.innerHTML = '<figure><img src="' + product.image + '" alt="' + product.name + '" loading="lazy"><figcaption>' + product.category + '</figcaption></figure><h3>' + product.name + '</h3><div class="price-info"><span class="old-price">' + this.formatCurrency(oldPrice) + '</span><strong>' + this.formatCurrency(product.price) + '</strong></div><button class="add-to-cart-btn" data-product-id="' + product.id + '" ' + buttonState + '>' + buttonText + '</button><button class="view-details-btn" data-product-id="' + product.id + '">View Details</button>'; container.appendChild(card); }); document.querySelectorAll('.add-to-cart-btn').forEach(btn => { btn.addEventListener('click', (e) => { e.stopPropagation(); this.addToCart(parseInt(btn.getAttribute('data-product-id'))); }); }); document.querySelectorAll('.view-details-btn').forEach(btn => { btn.addEventListener('click', (e) => { e.stopPropagation(); this.showProductDetails(parseInt(btn.getAttribute('data-product-id'))); }); }); document.querySelectorAll('.product-card').forEach(card => { card.addEventListener('click', () => { const viewBtn = card.querySelector('.view-details-btn'); if (viewBtn) this.showProductDetails(parseInt(viewBtn.getAttribute('data-product-id'))); }); }); },
+    showProductDetails: function(productId) { const product = this.products.find(p => p.id === productId); if (!product) return; const modalBody = document.getElementById('product-modal-body'); const stockClass = product.inStock ? 'in-stock' : 'out-of-stock'; modalBody.innerHTML = '<img src="' + product.image + '" alt="' + product.name + '"><div class="product-modal-info"><h2>' + product.name + '</h2><p class="category">' + product.category + '</p><p class="price">' + this.formatCurrency(product.price) + '</p><span class="stock-status ' + stockClass + '">' + (product.inStock ? 'In Stock' : 'Out of Stock') + '</span><p class="description">' + product.description + '</p>' + (product.inStock ? '<button onclick="app.addToCart(' + product.id + '); app.closeModal(\'product-modal\')">Add to Cart</button>' : '') + '</div>'; this.openModal('product-modal'); },
+    addToCart: function(productId) { const product = this.products.find(p => p.id === productId); if (product && product.inStock) { const existingItem = this.cart.find(item => item.id === productId); if (existingItem) existingItem.quantity++; else this.cart.push({ ...product, quantity: 1 }); this.saveCartToStorage(); this.updateCartDisplay(); this.updateCartBadge(); this.showToast('Added ' + product.name + ' to cart!', 'success'); } },
+    updateQuantity: function(index, change) { if (index < 0 || index >= this.cart.length) return; this.cart[index].quantity += change; if (this.cart[index].quantity <= 0) this.removeFromCart(index); else { this.saveCartToStorage(); this.updateCartDisplay(); this.updateCartBadge(); } },
+    removeFromCart: function(index) { if (index < 0 || index >= this.cart.length) return; const itemName = this.cart[index].name; this.cart.splice(index, 1); this.saveCartToStorage(); this.updateCartDisplay(); this.updateCartBadge(); this.showToast('Removed ' + itemName + ' from cart', 'info'); },
+    clearCart: function() { if (this.cart.length === 0) return; if (confirm('Clear your cart?')) { this.cart = []; this.saveCartToStorage(); this.updateCartDisplay(); this.updateCartBadge(); this.showToast('Cart cleared', 'info'); } },
+    updateCartDisplay: function() { const cartTableBody = document.getElementById("cart-items"); const cartTotals = document.getElementById("cart-totals"); const cartEmptyMessage = document.getElementById("cart-empty-message"); const cartContent = document.getElementById("cart-content"); if (!cartTableBody) return; cartTableBody.innerHTML = ""; cartTotals.innerHTML = ""; if (this.cart.length === 0) { if (cartEmptyMessage) cartEmptyMessage.style.display = 'block'; if (cartContent) cartContent.style.display = 'none'; return; } if (cartEmptyMessage) cartEmptyMessage.style.display = 'none'; if (cartContent) cartContent.style.display = 'block'; let subTotal = 0; this.cart.forEach((item, index) => { const itemTotal = item.price * item.quantity; subTotal += itemTotal; const row = document.createElement("tr"); row.innerHTML = '<td>' + item.name + '</td><td>' + this.formatCurrency(item.price) + '</td><td><div class="quantity-controls"><button class="quantity-btn" onclick="app.updateQuantity(' + index + ', -1)">-</button><span class="quantity-display">' + item.quantity + '</span><button class="quantity-btn" onclick="app.updateQuantity(' + index + ', 1)">+</button></div></td><td>' + this.formatCurrency(itemTotal) + '</td><td><button class="remove-btn" onclick="app.removeFromCart(' + index + ')">Remove</button></td>'; cartTableBody.appendChild(row); }); const taxAmount = this.calculateTax(subTotal, 0.13); const grandTotal = subTotal + taxAmount; cartTotals.innerHTML = '<tr><td colspan="3" style="text-align:right;">Subtotal:</td><td colspan="2">' + this.formatCurrency(subTotal) + '</td></tr><tr><td colspan="3" style="text-align:right;">Tax (13%):</td><td colspan="2">' + this.formatCurrency(taxAmount) + '</td></tr><tr class="total-row"><td colspan="3" style="text-align:right;">Grand Total:</td><td colspan="2">' + this.formatCurrency(grandTotal) + '</td></tr>'; },
+    updateCartBadge: function() { const cartCountEl = document.getElementById('cart-count'); if (cartCountEl) cartCountEl.textContent = this.cart.reduce((sum, item) => sum + item.quantity, 0); },
+    saveCartToStorage: function() { try { localStorage.setItem('jholaCart', JSON.stringify(this.cart)); } catch(e) {} },
+    loadCartFromStorage: function() { try { const saved = localStorage.getItem('jholaCart'); if(saved) this.cart = JSON.parse(saved); } catch(e) { this.cart = []; } },
+    openCheckout: function() { if (this.cart.length === 0) { this.showToast('Cart is empty!', 'error'); return; } const summaryContent = document.getElementById('order-summary-content'); let summaryHTML = '', subtotal = 0; this.cart.forEach(item => { const itemTotal = item.price * item.quantity; subtotal += itemTotal; summaryHTML += '<div class="order-item"><span>' + item.name + ' x ' + item.quantity + '</span><span>' + this.formatCurrency(itemTotal) + '</span></div>'; }); summaryHTML += '<div class="order-item" style="font-weight:bold;margin-top:10px;padding-top:10px;border-top:2px solid #ddd;"><span>Total:</span><span>' + this.formatCurrency(subtotal + this.calculateTax(subtotal, 0.13)) + '</span></div>'; summaryContent.innerHTML = summaryHTML; this.openModal('checkout-modal'); },
+    handleCheckout: function(e) { e.preventDefault(); const form = e.target; const formData = new FormData(form); const name = formData.get('name').trim(), email = formData.get('email').trim(); const phone = formData.get('phone').trim(), address = formData.get('address').trim(), city = formData.get('city'); if (!name || !email || !phone || !address || !city) { this.showToast('Fill all required fields', 'error'); return; } if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { this.showToast('Invalid email', 'error'); return; } if (!/^[0-9]{10}$/.test(phone)) { this.showToast('Enter 10-digit phone', 'error'); return; } this.showToast('Processing...', 'info'); setTimeout(() => { this.cart = []; this.saveCartToStorage(); this.updateCartDisplay(); this.updateCartBadge(); this.closeModal('checkout-modal'); form.reset(); this.showToast('Order placed! ID: ORD-' + Date.now(), 'success'); window.scrollTo({ top: 0, behavior: 'smooth' }); }, 1500); },
+    handleContact: function(e) { e.preventDefault(); const form = e.target, formData = new FormData(form); const name = formData.get('name').trim(), email = formData.get('email').trim(); if (!name || !email) { this.showToast('Fill required fields', 'error'); return; } if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { this.showToast('Invalid email', 'error'); return; } this.showToast('Thank you, ' + name + '!', 'success'); form.reset(); },
+    openModal: function(modalId) { const modal = document.getElementById(modalId); if (modal) { modal.classList.add('show'); modal.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; } },
+    closeModal: function(modalId) { const modal = document.getElementById(modalId); if (modal) { modal.classList.remove('show'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; } },
+    showToast: function(message, type) { if(type===undefined)type='info'; const container = document.getElementById('toast-container'); if (!container) return; const toast = document.createElement('div'); toast.className = 'toast ' + type; const icon = type === 'success' ? '\u2713' : type === 'error' ? '\u2715' : '\u2139'; toast.innerHTML = '<span>' + icon + '</span><span>' + message + '</span>'; container.appendChild(toast); setTimeout(() => toast.remove(), 3000); }
 };
-
-// --- NEW: IIFE (Immediately Invoked Function Expression)  ---
-// This runs automatically to start the app, keeping the global scope clean.
-(function() {
-    app.init();
-})();
+(function() { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function() { app.init(); }); else app.init(); })();

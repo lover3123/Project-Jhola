@@ -1,11 +1,20 @@
 /* --- 1. GLOBAL & TYPOGRAPHY --- */
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f9;
     color: #333;
-    box-sizing: border-box;
+    line-height: 1.6;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
 }
 
 /* --- 2. HEADER & NAVIGATION --- */
@@ -14,7 +23,7 @@ header {
     color: white;
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: sticky; /* Keeps nav visible while scrolling */
+    position: sticky;
     top: 0;
     z-index: 1000;
 }
@@ -23,8 +32,15 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
+    gap: 20px;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #f1c40f;
 }
 
 nav ul {
@@ -32,42 +48,183 @@ nav ul {
     display: flex;
     gap: 20px;
     padding: 0;
+    margin: 0;
 }
 
 nav a {
     color: white;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 nav a:hover {
     color: #f1c40f;
 }
 
+/* Cart Badge */
+.cart-badge {
+    background-color: #e74c3c;
+    color: white;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cart-badge:hover {
+    transform: scale(1.1);
+    background-color: #c0392b;
+}
+
+#cart-count {
+    line-height: 1;
+}
+
 /* --- 3. LAYOUT STRUCTURE (ID Selectors) --- */
 #shop-layout {
     display: flex;
     gap: 20px;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 20px auto;
     padding: 0 20px;
 }
 
 #product-list {
-    flex: 3; /* Products take 75% width */
+    flex: 3;
 }
 
-/* Sidebar Styling (Moved from HTML to here) */
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.hero-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    opacity: 0.9;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #f1c40f;
+    color: #2c3e50;
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    background-color: #f39c12;
+}
+
+/* Controls Container (Search & Sort) */
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.search-box {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+.search-box input {
+    flex: 1;
+    margin: 0;
+    border-radius: 20px 0 0 20px;
+    border: 2px solid #ddd;
+}
+
+.search-box button {
+    background-color: #2c3e50;
+    border-radius: 0 20px 20px 0;
+    margin: 0;
+    padding: 10px 15px;
+}
+
+.sort-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sort-box label {
+    font-weight: bold;
+    color: #555;
+}
+
+.sort-box select {
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 2px solid #ddd;
+    cursor: pointer;
+    background-color: white;
+}
+
+/* Sidebar Styling */
 aside {
-    flex: 1; /* Sidebar takes 25% width */
+    flex: 1;
     background: #fff;
-    padding: 15px;
+    padding: 20px;
     height: fit-content;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 80px;
 }
 
-/* Fluid Grid Layout (Glossary Concept) */
+aside h3, aside h4 {
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.offer-highlight {
+    background-color: #f1c40f;
+    color: #2c3e50;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+}
+
+.features-list li {
+    padding: 8px 0;
+    color: #27ae60;
+    font-weight: 500;
+}
+
+/* Fluid Grid Layout */
 #container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -76,8 +233,8 @@ aside {
 }
 
 #cart-section, #contact {
-    max-width: 1000px;
-    margin: 20px auto;
+    max-width: 1200px;
+    margin: 30px auto;
     padding: 0 20px;
 }
 
@@ -88,11 +245,13 @@ aside {
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     text-align: center;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
 }
 
 .product-card figure {
@@ -104,6 +263,41 @@ aside {
     max-width: 100%;
     height: auto;
     border-radius: 4px;
+    object-fit: cover;
+}
+
+.product-card h3 {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #2c3e50;
+}
+
+.product-card .price-info {
+    margin: 10px 0;
+}
+
+.product-card button {
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+
+.product-card button:disabled {
+    background-color: #ccc !important;
+    cursor: not-allowed;
+}
+
+.product-card button:disabled:hover {
+    background-color: #ccc !important;
+}
+
+/* View Details Button */
+.view-details-btn {
+    background-color: #3498db !important;
+    margin-top: 5px !important;
+}
+
+.view-details-btn:hover {
+    background-color: #2980b9 !important;
 }
 
 /* Utility Class for Sale Prices */
@@ -112,6 +306,11 @@ aside {
     color: #e74c3c;
     margin-right: 8px;
     font-size: 0.9rem;
+}
+
+.required {
+    color: #e74c3c;
+    font-weight: bold;
 }
 
 /* --- 5. FORMS & BUTTONS --- */
@@ -148,25 +347,160 @@ button {
     cursor: pointer;
     font-size: 1rem;
     margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
     background-color: #219150;
+    transform: translateY(-2px);
 }
 
-/* --- 6. TABLE STYLING (Cheat Sheet Concept) --- */
+button:active {
+    transform: translateY(0);
+}
+
+/* Quantity Controls */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    margin: 0;
+    background-color: #3498db;
+    font-size: 1.2rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-btn:hover {
+    background-color: #2980b9;
+}
+
+.quantity-display {
+    min-width: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Cart Specific Buttons */
+.remove-btn {
+    background-color: #e74c3c !important;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.remove-btn:hover {
+    background-color: #c0392b !important;
+}
+
+.checkout-button {
+    background-color: #f39c12 !important;
+    font-size: 1.1rem;
+    padding: 15px 30px;
+    width: auto;
+    margin: 10px;
+}
+
+.checkout-button:hover {
+    background-color: #d68910 !important;
+}
+
+.clear-button {
+    background-color: #95a5a6 !important;
+    padding: 15px 30px;
+    width: auto;
+    margin: 10px;
+}
+
+.clear-button:hover {
+    background-color: #7f8c8d !important;
+}
+
+/* Payment Options */
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.payment-option:hover {
+    border-color: #3498db;
+    background-color: #f8f9fa;
+}
+
+.payment-option input[type="radio"] {
+    width: auto;
+    margin: 0;
+}
+
+.payment-option span {
+    font-weight: 500;
+}
+
+.payment-option input[type="radio"]:checked + span {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    background-color: #95a5a6 !important;
+}
+
+.cancel-btn:hover {
+    background-color: #7f8c8d !important;
+}
+
+.confirm-order-btn {
+    background-color: #27ae60 !important;
+    font-size: 1.1rem;
+    padding: 12px 30px;
+}
+
+.confirm-order-btn:hover {
+    background-color: #219150 !important;
+}
+
+/* --- 6. TABLE STYLING --- */
 table {
     width: 100%;
     border-collapse: collapse;
     background: white;
     border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
-    padding: 12px;
+    padding: 15px;
     border: 1px solid #ddd;
     text-align: left;
 }
@@ -176,13 +510,259 @@ thead tr {
     color: white;
 }
 
+tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+tfoot tr {
+    font-weight: bold;
+    background-color: #ecf0f1;
+}
+
+.total-row {
+    background-color: #27ae60 !important;
+    color: white;
+    font-size: 1.1rem;
+}
+
+/* Cart Empty State */
+.cart-empty {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.cart-empty p {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+.checkout-section {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    animation: slideIn 0.3s ease;
+    position: relative;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 2px solid #ecf0f1;
+    background-color: #2c3e50;
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-modal {
+    background: transparent !important;
+    color: white;
+    font-size: 2rem;
+    line-height: 1;
+    padding: 5px 10px;
+    margin: 0;
+    transition: transform 0.2s ease;
+}
+
+.close-modal:hover {
+    transform: scale(1.2);
+    background: transparent !important;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* Order Summary in Modal */
+.order-summary {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.order-summary h3 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+#order-summary-content {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+/* Product Modal Specific */
+.product-modal-content {
+    max-width: 700px;
+}
+
+.product-modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 10px;
+}
+
+.product-modal-body img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.product-modal-info h2 {
+    color: #2c3e50;
+    margin-top: 0;
+}
+
+.product-modal-info .price {
+    font-size: 1.5rem;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.product-modal-info .category {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.product-modal-info .description {
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+.product-modal-info .stock-status {
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: inline-block;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.in-stock {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.out-of-stock {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Toast Notifications */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 3000;
+}
+
+.toast {
+    background: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+    min-width: 250px;
+}
+
+.toast.success {
+    border-left: 4px solid #27ae60;
+}
+
+.toast.error {
+    border-left: 4px solid #e74c3c;
+}
+
+.toast.info {
+    border-left: 4px solid #3498db;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
 /* Footer Styling */
 footer {
     text-align: center;
-    padding: 20px;
+    padding: 30px;
     background-color: #2c3e50;
     color: white;
-    margin-top: 40px;
+    margin-top: 60px;
 }
 
 /* --- 7. RESPONSIVENESS (Mobile) --- */
@@ -193,6 +773,7 @@ footer {
     aside {
         order: -1;
         margin-bottom: 20px;
+        position: static !important;
     }
     nav {
         flex-direction: column;
@@ -202,43 +783,103 @@ footer {
         flex-direction: column;
         gap: 10px;
         margin-top: 10px;
+        text-align: center;
+    }
+    .cart-badge {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+    }
+    .hero-content h2 {
+        font-size: 1.8rem;
+    }
+    .hero-content p {
+        font-size: 1rem;
+    }
+    .controls-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-box {
+        max-width: none;
+    }
+    .sort-box {
+        justify-content: space-between;
+    }
+    .product-modal-body {
+        grid-template-columns: 1fr;
+    }
+    .payment-options {
+        grid-template-columns: 1fr;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
+    .form-actions button {
+        width: 100%;
+    }
+    table {
+        font-size: 0.85rem;
+    }
+    th, td {
+        padding: 10px 5px;
+    }
+    .checkout-section {
+        flex-direction: column;
+    }
+    .checkout-button, .clear-button {
+        width: 100%;
     }
 }
-/* --- FILTER BUTTON STYLES (Fixing the "Blocky" look) --- */
 
-/* 1. Layout: Put them side-by-side */
+/* Small mobile devices */
+@media (max-width: 480px) {
+    .hero-content h2 {
+        font-size: 1.5rem;
+    }
+    nav .logo h1 {
+        font-size: 1.4rem;
+    }
+    #container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Filter Button Styles */
 #filter-buttons {
     display: flex;
-    flex-wrap: wrap; /* Allows them to drop to next line on phone */
-    gap: 10px;       /* Space between buttons */
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
-/* 2. Style: Make them look like "Tabs" or "Pills" */
 #filter-buttons button {
-    background-color: #e0e0e0; /* Light Grey (Neutral) */
-    color: #333;               /* Dark Text */
+    background-color: #e0e0e0;
+    color: #333;
     border: 1px solid #ccc;
-    padding: 8px 16px;         /* Smaller, sleeker padding */
-    border-radius: 20px;       /* "Pill" shape */
+    padding: 8px 16px;
+    border-radius: 20px;
     font-size: 0.9rem;
-    margin: 0;                 /* Remove the top margin */
-    
-    /* Reset the flex centering we added to global buttons */
+    margin: 0;
     display: inline-block;
+    transition: all 0.3s ease;
 }
 
-/* 3. Interactive State */
 #filter-buttons button:hover {
-    background-color: #2c3e50; /* Dark Blue on hover */
+    background-color: #2c3e50;
     color: white;
     border-color: #2c3e50;
-    transform: translateY(-2px); /* Tiny lift */
+    transform: translateY(-2px);
 }
 
-/* Optional: Style the "Active" button if you want later */
 #filter-buttons button:focus {
     background-color: #2c3e50;
     color: white;
     outline: none;
+}
+
+#filter-buttons button.active {
+    background-color: #2c3e50;
+    color: white;
+    border-color: #2c3e50;
 }

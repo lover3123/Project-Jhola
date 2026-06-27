@@ -17,7 +17,37 @@ const app = {
     searchQuery: "",
     formatCurrency: (amount) => "Rs. " + amount.toLocaleString(),
     calculateTax: function(amount, taxRate) { return amount * taxRate; },
-    init: function() { this.loadCartFromStorage(); this.displayProducts("All"); this.setupFilters(); this.setupSearchAndSort(); this.setupEventListeners(); this.updateCartBadge(); this.updateCartDisplay(); },
+    init: function() { this.loadCartFromStorage(); this.displayProducts("All"); this.setupFilters(); this.setupSearchAndSort(); this.setupEventListeners(); this.updateCartBadge(); this.updateCartDisplay(); this.handleInitialLoading(); },
+    handleInitialLoading: function() {
+        const loadingScreen = document.getElementById('loading-screen');
+        const mainInterface = document.getElementById('main-interface');
+        const bootLog = document.getElementById('boot-log');
+        const loadingBar = document.getElementById('loading-bar');
+        const steps = [
+            'BOOT SECTOR CHECK... OK',
+            'LOADING ASSETS... OK',
+            'INITIALIZING TERMINAL... OK',
+            'SYNCING MARKETPLACE... OK',
+            'COMPLETE. WELCOME.'
+        ];
+        steps.forEach((text, index) => {
+            setTimeout(() => {
+                if (bootLog) {
+                    const line = document.createElement('div');
+                    line.className = 'boot-line';
+                    line.textContent = text;
+                    bootLog.appendChild(line);
+                }
+                if (loadingBar) {
+                    loadingBar.style.width = `${((index + 1) / steps.length) * 100}%`;
+                }
+            }, 300 * (index + 1));
+        });
+        setTimeout(() => {
+            if (loadingScreen) loadingScreen.classList.add('hidden');
+            if (mainInterface) mainInterface.classList.remove('hidden');
+        }, 300 * steps.length + 400);
+    },
     setupFilters: function() { const categories = ["All", ...new Set(this.products.map(p => p.category))]; const filterContainer = document.getElementById("filter-buttons"); if(!filterContainer) return; filterContainer.innerHTML = ""; categories.forEach(cat => { const btn = document.createElement("button"); btn.textContent = cat; btn.setAttribute('aria-pressed', cat === "All" ? "true" : "false"); if (cat === "All") btn.classList.add('active'); btn.onclick = () => { document.querySelectorAll('#filter-buttons button').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); }); btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); this.currentFilter = cat; this.displayProducts(cat); }; filterContainer.appendChild(btn); }); },
     setupSearchAndSort: function() { const searchInput = document.getElementById('search-input'); const sortSelect = document.getElementById('sort-select'); if (searchInput) { searchInput.addEventListener('input', (e) => { this.searchQuery = e.target.value.toLowerCase(); this.displayProducts(this.currentFilter); }); } if (sortSelect) { sortSelect.addEventListener('change', (e) => { this.currentSort = e.target.value; this.displayProducts(this.currentFilter); }); } },
     setupEventListeners: function() { document.querySelectorAll('.close-modal').forEach(btn => { btn.addEventListener('click', () => { this.closeModal('checkout-modal'); this.closeModal('product-modal'); }); }); window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) this.closeModal(e.target.id); }); const checkoutBtn = document.getElementById('checkout-btn'); if (checkoutBtn) checkoutBtn.addEventListener('click', () => this.openCheckout()); const clearCartBtn = document.getElementById('clear-cart-btn'); if (clearCartBtn) clearCartBtn.addEventListener('click', () => this.clearCart()); const checkoutForm = document.getElementById('checkout-form'); if (checkoutForm) checkoutForm.addEventListener('submit', (e) => this.handleCheckout(e)); const contactForm = document.getElementById('contact-form'); if (contactForm) contactForm.addEventListener('submit', (e) => this.handleContact(e)); const cartBadge = document.getElementById('cart-badge'); if (cartBadge) cartBadge.addEventListener('click', () => { document.getElementById('cart-section').scrollIntoView({ behavior: 'smooth' }); }); },

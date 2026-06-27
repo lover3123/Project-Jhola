@@ -3,233 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jhola Shop - Best Electronics in Nepal</title>
+    <title>JHOLA_TERMINAL v2.0 - HACKCAT EDITION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <meta name="description" content="Jhola Shop - Your one-stop shop for electronics, accessories, and more in Nepal. Get 10% off on all electronics!">
+    <meta name="description" content="JHOLA_TERMINAL - Your retro hacker shopping experience in Nepal.">
     <meta name="author" content="Jhola Shop Team">
-    <meta name="keywords" content="electronics, Nepal, shopping, headphones, keyboard, mouse, accessories">
+    <meta name="keywords" content="electronics, Nepal, shopping, retro, terminal, hacker">
     <meta name="robots" content="index, follow">
 </head>
 <body>
+    <!-- CRT Overlay Effects -->
+    <div class="crt-overlay"></div>
+    <div class="scanlines"></div>
     
-    <header>
-        <nav>
-            <div class="logo">
-                <h1>Jhola Shop</h1>
-            </div>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#product-list">Products</a></li>
-                <li><a href="#cart-section">Cart</a></li>
-            </ul>
-            <div class="cart-badge" id="cart-badge" aria-label="Cart items count">
-                <span id="cart-count">0</span>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <!-- Home Section -->
-        <section id="home" class="hero-section">
-            <div class="hero-content">
-                <h2>Welcome to Jhola Shop</h2>
-                <p>Your one-stop destination for quality electronics and accessories in Nepal</p>
-                <a href="#product-list" class="cta-button">Shop Now</a>
-            </div>
-        </section>
-
-        <section id="shop-layout">
-            
-           <div id="product-list"> 
-                <h2>Featured Items</h2>
-                
-                <!-- Search and Sort Controls -->
-                <div class="controls-container">
-                    <div class="search-box">
-                        <input type="text" id="search-input" placeholder="Search products..." aria-label="Search products">
-                        <button id="search-btn" aria-label="Search">🔍</button>
-                    </div>
-                    <div class="sort-box">
-                        <label for="sort-select">Sort by:</label>
-                        <select id="sort-select" aria-label="Sort products">
-                            <option value="default">Default</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="name-asc">Name: A to Z</option>
-                            <option value="name-desc">Name: Z to A</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div id="filter-buttons" role="group" aria-label="Category filters"></div>
-
-                <div id="container">
-                    <p>Loading products...</p>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="terminal-window loading-terminal">
+            <div class="terminal-header">
+                <span class="terminal-title">SYSTEM_BOOT.EXE</span>
+                <div class="terminal-controls">
+                    <span class="control-dot red"></span>
+                    <span class="control-dot yellow"></span>
+                    <span class="control-dot green"></span>
                 </div>
             </div>
+            <div class="terminal-body">
+                <div class="boot-log" id="boot-log"></div>
+                <div class="loading-bar-container">
+                    <div class="loading-bar" id="loading-bar"></div>
+                </div>
+                <p class="loading-text">INITIALIZING SYSTEM...</p>
+            </div>
+        </div>
+    </div>
 
-            <aside>
-                <h3>Special Offers</h3>
-                <p class="offer-highlight">Get 10% off on all electronics this week!</p>
-                <hr>
-                <h4>New Arrivals</h4>
-                <p>Check out the new mechanical keyboards.</p>
-                <hr>
-                <h4>Why Choose Us?</h4>
-                <ul class="features-list">
-                    <li>✓ Quality Products</li>
-                    <li>✓ Best Prices in Nepal</li>
-                    <li>✓ Fast Delivery</li>
-                    <li>✓ Excellent Support</li>
-                </ul>
+    <!-- Main Terminal Interface -->
+    <div id="main-interface" class="main-interface hidden">
+        
+        <!-- Top Status Bar -->
+        <header class="status-bar">
+            <div class="status-left">
+                <span class="logo">┌─[ JHOLA_TERMINAL ]</span>
+                <span class="version">v2.0.1</span>
+            </div>
+            <nav class="terminal-nav">
+                <a href="#home" class="nav-item" data-key="01">[01] HOME_</a>
+                <a href="#product-list" class="nav-item" data-key="02">[02] SHOP_</a>
+                <a href="#quests" class="nav-item" data-key="03">[03] QUESTS_</a>
+                <a href="#deals" class="nav-item" data-key="04">[04] DEALS_</a>
+                <a href="#inventory" class="nav-item" data-key="05">[05] INVENTORY_</a>
+                <a href="#profile" class="nav-item" data-key="06">[06] PROFILE_</a>
+            </nav>
+            <div class="status-right">
+                <div class="cart-indicator" id="cart-badge" aria-label="Cart items count">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="terminal-desktop">
+            <!-- Left Sidebar - Player Profile -->
+            <aside class="sidebar-left">
+                <div class="terminal-widget player-profile">
+                    <div class="widget-header">
+                        <span class="widget-title">► PLAYER_PROFILE</span>
+                    </div>
+                    <div class="widget-content">
+                        <div class="avatar-container">
+                            <div class="pixel-avatar" id="player-avatar">
+                                <span class="avatar-emoji">🐱</span>
+                            </div>
+                            <span class="level-badge" id="player-level">LVL 1</span>
+                        </div>
+                        <div class="player-name" id="player-name">GUEST_USER</div>
+                        
+                        <!-- XP Bar -->
+                        <div class="xp-container">
+                            <div class="xp-label">EXPERIENCE</div>
+                            <div class="xp-bar-bg">
+                                <div class="xp-bar-fill" id="xp-bar" style="width: 0%"></div>
+                            </div>
+                            <div class="xp-text"><span id="xp-current">0</span> / <span id="xp-max">100</span> XP</div>
+                        </div>
+
+                        <!-- Coins -->
+                        <div class="coins-container">
+                            <span class="coin-icon">🪙</span>
+                            <span class="coin-count" id="coin-count">0</span>
+                            <span class="coin-label">COINS</span>
+                        </div>
+
+                        <!-- Mini Pet Cat -->
+                        <div class="pet-container">
+                            <div class="pet-cat" id="pet-cat">
+                                <span class="pet-emoji">🐈</span>
+                                <div class="pet-bubble" id="pet-bubble">Meow!</div>
+                            </div>
+                        </div>
+
+                        <!-- Daily Streak -->
+                        <div class="streak-container">
+                            <span class="streak-icon">🔥</span>
+                            <span class="streak-count" id="streak-count">0</span>
+                            <span class="streak-label">DAY STREAK</span>
+                        </div>
+
+                        <!-- Recent Achievements -->
+                        <div class="achievements-mini">
+                            <div class="achievements-title">► BADGES</div>
+                            <div class="badge-container" id="badge-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Status Widget -->
+                <div class="terminal-widget system-status">
+                    <div class="widget-header">
+                        <span class="widget-title">► SYSTEM_STATUS</span>
+                    </div>
+                    <div class="widget-content">
+                        <div class="status-row">
+                            <span class="status-label">SERVER:</span>
+                            <span class="status-value online">ONLINE</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">USERS:</span>
+                            <span class="status-value" id="users-online">18,245</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">PATCH:</span>
+                            <span class="status-value">2.0.1</span>
+                        </div>
+                        <div class="status-row">
+                            <span class="status-label">PING:</span>
+                            <span class="status-value" id="ping-value">24ms</span>
+                        </div>
+                    </div>
+                </div>
             </aside>
 
-        </section>
-
-        <hr> 
-
-        <section id="cart-section">
-            <h2>Your Shopping Cart</h2>
-            <div id="cart-empty-message" class="cart-empty">
-                <p>Your cart is empty. Start shopping to add items!</p>
-                <a href="#product-list" class="cta-button">Browse Products</a>
-            </div>
-            <div id="cart-content" style="display: none;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product Name</th> 
-                            <th>Unit Price</th> 
-                            <th>Quantity</th> 
-                            <th>Total (Rs.)</th>
-                            <th>Action</th> 
-                        </tr>
-                    </thead>
-                    <tbody id="cart-items">
-                    </tbody>
-                    <tfoot id="cart-totals">
-                    </tfoot>
-                </table>
-                <div class="checkout-section">
-                    <button id="checkout-btn" class="checkout-button">Proceed to Checkout</button>
-                    <button id="clear-cart-btn" class="clear-button">Clear Cart</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Checkout Modal -->
-        <div id="checkout-modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 id="modal-title">Checkout</h2>
-                    <button class="close-modal" aria-label="Close modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="order-summary">
-                        <h3>Order Summary</h3>
-                        <div id="order-summary-content"></div>
-                    </div>
-                    <form id="checkout-form" novalidate>
-                        <fieldset>
-                            <legend>Shipping Information</legend>
-                            
-                            <label for="checkout-name">Full Name: <span class="required">*</span></label>
-                            <input type="text" id="checkout-name" name="name" placeholder="Enter your full name" required>
-                    
-                            <label for="checkout-email">Email: <span class="required">*</span></label>
-                            <input type="email" id="checkout-email" name="email" placeholder="Enter your email" required>
-        
-                            <label for="checkout-phone">Phone Number: <span class="required">*</span></label>
-                            <input type="tel" id="checkout-phone" name="phone" placeholder="Enter your phone number" required pattern="[0-9]{10}">
-                    
-                            <label for="checkout-address">Delivery Address: <span class="required">*</span></label>
-                            <textarea id="checkout-address" name="address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
-                    
-                            <label for="checkout-city">City: <span class="required">*</span></label>
-                            <select id="checkout-city" name="city" required>
-                                <option value="">Select City</option>
-                                <option value="kathmandu">Kathmandu</option>
-                                <option value="pokhara">Pokhara</option>
-                                <option value="lalitpur">Lalitpur</option>
-                                <option value="bhaktapur">Bhaktapur</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </fieldset>
-                        
-                        <fieldset>
-                            <legend>Payment Method</legend>
-                            <div class="payment-options">
-                                <label class="payment-option">
-                                    <input type="radio" name="payment" value="cod" checked>
-                                    <span>Cash on Delivery</span>
-                                </label>
-                                <label class="payment-option">
-                                    <input type="radio" name="payment" value="esewa">
-                                    <span>eSewa</span>
-                                </label>
-                                <label class="payment-option">
-                                    <input type="radio" name="payment" value="khalti">
-                                    <span>Khalti</span>
-                                </label>
-                                <label class="payment-option">
-                                    <input type="radio" name="payment" value="card">
-                                    <span>Credit/Debit Card</span>
-                                </label>
+            <!-- Main Content Area -->
+            <section class="main-content">
+                <!-- Home Section -->
+                <div id="home" class="terminal-section hero-section">
+                    <div class="terminal-window hero-window">
+                        <div class="terminal-header">
+                            <span class="terminal-title">WELCOME_SCREEN.EXE</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
                             </div>
-                        </fieldset>
-                        
-                        <div class="form-actions">
-                            <button type="button" class="cancel-btn close-modal">Cancel</button>
-                            <button type="submit" class="confirm-order-btn">Place Order</button>
                         </div>
-                    </form>
+                        <div class="terminal-body hero-body">
+                            <div class="pixel-room">
+                                <div class="room-background">
+                                    <div class="window-rain"></div>
+                                    <div class="city-skyline"></div>
+                                </div>
+                                <div class="desk-area">
+                                    <div class="crt-monitor">
+                                        <div class="monitor-screen">
+                                            <div class="screen-content">
+                                                <h1 class="hero-title typing-text" id="hero-title"></h1>
+                                                <p class="hero-subtitle">INSERT COIN TO START_</p>
+                                                <button class="cta-button pixel-btn" id="start-btn">
+                                                    <span class="btn-text">▶ START_EXPLORING</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="monitor-base"></div>
+                                    </div>
+                                    <div class="desk-items">
+                                        <div class="keyboard">⌨️</div>
+                                        <div class="coffee-cup">☕</div>
+                                        <div class="plant">🌱</div>
+                                        <div class="sneakers">👟</div>
+                                    </div>
+                                </div>
+                                <div class="room-cat">
+                                    <span class="cat-emoji">🐱</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quest Board -->
+                    <div class="terminal-window quest-board" id="quests">
+                        <div class="terminal-header">
+                            <span class="terminal-title">QUEST_BOARD.LOG</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="quest-container" id="quest-container">
+                                <!-- Quests will be dynamically inserted -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hot Deals -->
+                    <div class="terminal-window hot-deals" id="deals">
+                        <div class="terminal-header">
+                            <span class="terminal-title">HOT_DEALS.LOG</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="marquee-container">
+                                <div class="marquee-text" id="deals-marquee">
+                                    ⚡ FLASH SALE: 10% OFF ELECTRONICS | FREE SHIPPING ON ORDERS OVER Rs. 5000 | DAILY REWARDS AVAILABLE ⚡
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shop Layout -->
+                <div id="shop-layout" class="terminal-section shop-section">
+                    <div class="terminal-window product-terminal" id="product-list">
+                        <div class="terminal-header">
+                            <span class="terminal-title">PRODUCT_INDEX.EXE</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body">
+                            <!-- Search and Sort Controls -->
+                            <div class="controls-container">
+                                <div class="search-box terminal-input">
+                                    <span class="prompt">></span>
+                                    <input type="text" id="search-input" placeholder="SEARCH_PRODUCTS..." aria-label="Search products">
+                                    <button id="search-btn" class="pixel-btn-small" aria-label="Search">⌕</button>
+                                </div>
+                                <div class="sort-box">
+                                    <span class="sort-label">SORT_BY:</span>
+                                    <select id="sort-select" class="terminal-select" aria-label="Sort products">
+                                        <option value="default">DEFAULT</option>
+                                        <option value="price-low">PRICE_ASC</option>
+                                        <option value="price-high">PRICE_DESC</option>
+                                        <option value="name-asc">NAME_A-Z</option>
+                                        <option value="name-desc">NAME_Z-A</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Category Filters as Pixel Folders -->
+                            <div id="filter-buttons" class="folder-tabs" role="group" aria-label="Category filters"></div>
+
+                            <!-- Product Grid -->
+                            <div id="container" class="inventory-grid">
+                                <div class="loading-state">
+                                    <div class="matrix-loader"></div>
+                                    <p>LOADING_INVENTORY...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cart/Inventory Section -->
+                <div id="cart-section" class="terminal-section cart-section">
+                    <div class="terminal-window inventory-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-title">INVENTORY.LOG</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body">
+                            <div id="cart-empty-message" class="cart-empty">
+                                <div class="empty-icon">📦</div>
+                                <p>INVENTORY_EMPTY</p>
+                                <p class="empty-sub">Initialize shopping sequence to add items</p>
+                                <a href="#product-list" class="cta-button pixel-btn">
+                                    <span class="btn-text">▶ BROWSE_CATALOG</span>
+                                </a>
+                            </div>
+                            <div id="cart-content" class="cart-content" style="display: none;">
+                                <table class="terminal-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ITEM_NAME</th> 
+                                            <th>UNIT_PRICE</th> 
+                                            <th>QTY</th> 
+                                            <th>TOTAL</th>
+                                            <th>ACTION</th> 
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cart-items"></tbody>
+                                    <tfoot id="cart-totals"></tfoot>
+                                </table>
+                                <div class="checkout-section">
+                                    <button id="checkout-btn" class="pixel-btn large">
+                                        <span class="btn-text">▶ PROCEED_CHECKOUT</span>
+                                    </button>
+                                    <button id="clear-cart-btn" class="pixel-btn danger">
+                                        <span class="btn-text">✖ CLEAR_INVENTORY</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checkout Modal -->
+                <div id="checkout-modal" class="modal terminal-modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+                    <div class="modal-content terminal-modal-content">
+                        <div class="terminal-header">
+                            <span class="terminal-title" id="modal-title">CHECKOUT_PROCESS.EXE</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body modal-body">
+                            <div class="order-summary">
+                                <div class="summary-header">
+                                    <span>► ORDER_SUMMARY</span>
+                                </div>
+                                <div id="order-summary-content"></div>
+                            </div>
+                            <form id="checkout-form" class="terminal-form" novalidate>
+                                <fieldset class="terminal-fieldset">
+                                    <legend>► SHIPPING_PARAMETERS</legend>
+                                    
+                                    <label for="checkout-name">FULL_NAME: <span class="required">*</span></label>
+                                    <input type="text" id="checkout-name" name="name" class="terminal-input-field" placeholder="ENTER_FULL_NAME" required>
+                            
+                                    <label for="checkout-email">EMAIL: <span class="required">*</span></label>
+                                    <input type="email" id="checkout-email" name="email" class="terminal-input-field" placeholder="ENTER_EMAIL" required>
+                
+                                    <label for="checkout-phone">PHONE: <span class="required">*</span></label>
+                                    <input type="tel" id="checkout-phone" name="phone" class="terminal-input-field" placeholder="0000000000" required pattern="[0-9]{10}">
+                
+                                    <label for="checkout-address">ADDRESS: <span class="required">*</span></label>
+                                    <textarea id="checkout-address" name="address" class="terminal-input-field" rows="3" placeholder="ENTER_DELIVERY_ADDRESS" required></textarea>
+                
+                                    <label for="checkout-city">CITY: <span class="required">*</span></label>
+                                    <select id="checkout-city" name="city" class="terminal-input-field" required>
+                                        <option value="">SELECT_CITY</option>
+                                        <option value="kathmandu">KATHMANDU</option>
+                                        <option value="pokhara">POKHARA</option>
+                                        <option value="lalitpur">LALITPUR</option>
+                                        <option value="bhaktapur">BHAKTAPUR</option>
+                                        <option value="other">OTHER</option>
+                                    </select>
+                                </fieldset>
+                                
+                                <fieldset class="terminal-fieldset">
+                                    <legend>► PAYMENT_METHOD</legend>
+                                    <div class="payment-options">
+                                        <label class="payment-option terminal-radio">
+                                            <input type="radio" name="payment" value="cod" checked>
+                                            <span class="radio-label">CASH_ON_DELIVERY</span>
+                                        </label>
+                                        <label class="payment-option terminal-radio">
+                                            <input type="radio" name="payment" value="esewa">
+                                            <span class="radio-label">ESEWA</span>
+                                        </label>
+                                        <label class="payment-option terminal-radio">
+                                            <input type="radio" name="payment" value="khalti">
+                                            <span class="radio-label">KHALTI</span>
+                                        </label>
+                                        <label class="payment-option terminal-radio">
+                                            <input type="radio" name="payment" value="card">
+                                            <span class="radio-label">CARD</span>
+                                        </label>
+                                    </div>
+                                </fieldset>
+                                
+                                <div class="form-actions">
+                                    <button type="button" class="pixel-btn cancel-btn close-modal">
+                                        <span class="btn-text">✖ ABORT</span>
+                                    </button>
+                                    <button type="submit" class="pixel-btn confirm-btn">
+                                        <span class="btn-text">▶ CONFIRM_ORDER</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Detail Modal -->
+                <div id="product-modal" class="modal terminal-modal" aria-hidden="true" role="dialog" aria-labelledby="product-modal-title">
+                    <div class="modal-content terminal-modal-content product-modal-content">
+                        <div class="terminal-header">
+                            <span class="terminal-title">ITEM_INSPECTOR.EXE</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body modal-body">
+                            <button class="close-modal terminal-close" aria-label="Close modal">×</button>
+                            <div class="product-modal-body" id="product-modal-body">
+                                <!-- Product details will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Section -->
+                <section id="contact" class="terminal-section contact-section">
+                    <div class="terminal-window contact-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-title">CONTACT_PROTOCOL.EXE</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body">
+                            <form id="contact-form" class="terminal-form" novalidate>
+                                <fieldset class="terminal-fieldset">
+                                    <legend>► TRANSMIT_MESSAGE</legend>
+                                    
+                                    <label for="name">CALLSIGN: <span class="required">*</span></label>
+                                    <input type="text" id="name" name="name" class="terminal-input-field" placeholder="ENTER_CALLSIGN" required>
+                            
+                                    <label for="email">FREQUENCY: <span class="required">*</span></label>
+                                    <input type="email" id="email" name="email" class="terminal-input-field" placeholder="ENTER_EMAIL" required>
+
+                                    <label for="phone">BACKUP_FREQ:</label>
+                                    <input type="tel" id="phone" name="phone" class="terminal-input-field" placeholder="0000000000" pattern="[0-9]{10}">
+                            
+                                    <label for="comments">TRANSMISSION:</label>
+                                    <textarea id="comments" name="comments" class="terminal-input-field" rows="4" placeholder="ENTER_MESSAGE"></textarea>
+                            
+                                    <button type="submit" class="pixel-btn">
+                                        <span class="btn-text">▶ SEND_TRANSMISSION</span>
+                                    </button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <div id="profile" class="terminal-section profile-section">
+                    <div class="terminal-window profile-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-title">PLAYER_STATS.LOG</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="profile-content">
+                                <div class="profile-header">
+                                    <div class="profile-avatar-large" id="profile-avatar">
+                                        <span class="avatar-emoji">🐱</span>
+                                    </div>
+                                    <div class="profile-info">
+                                        <h2 class="profile-name" id="profile-name">GUEST_USER</h2>
+                                        <div class="profile-rank" id="profile-rank">RANK: NOVICE_HACKER</div>
+                                    </div>
+                                </div>
+                                <div class="profile-stats-grid">
+                                    <div class="stat-card">
+                                        <div class="stat-icon">📊</div>
+                                        <div class="stat-value" id="total-orders">0</div>
+                                        <div class="stat-label">ORDERS</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">💰</div>
+                                        <div class="stat-value" id="total-spent">Rs. 0</div>
+                                        <div class="stat-label">SPENT</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">🏆</div>
+                                        <div class="stat-value" id="total-achievements">0</div>
+                                        <div class="stat-label">BADGES</div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">⭐</div>
+                                        <div class="stat-value" id="player-level-display">1</div>
+                                        <div class="stat-label">LEVEL</div>
+                                    </div>
+                                </div>
+                                <div class="achievements-full">
+                                    <h3>► UNLOCKED_BADGES</h3>
+                                    <div class="badge-grid" id="badge-grid"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="terminal-footer">
+            <div class="footer-log">
+                <div class="log-entry">
+                    <span class="log-time">[SYS]</span>
+                    <span class="log-message">SYSTEM STATUS: ONLINE</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">[NET]</span>
+                    <span class="log-message">SERVER: CONNECTED</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">[USR]</span>
+                    <span class="log-message">USERS ONLINE: <span id="footer-users">18,245</span></span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">[VER]</span>
+                    <span class="log-message">PATCH VERSION: 2.0.1</span>
                 </div>
             </div>
-        </div>
-
-        <!-- Product Detail Modal -->
-        <div id="product-modal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="product-modal-title">
-            <div class="modal-content product-modal-content">
-                <button class="close-modal" aria-label="Close modal">&times;</button>
-                <div class="product-modal-body" id="product-modal-body">
-                    <!-- Product details will be inserted here -->
-                </div>
+            <div class="footer-copy">
+                <p>© 2025 JHOLA_TERMINAL | ALL RIGHTS RESERVED</p>
             </div>
-        </div>
-
-        <section id="contact">
-            <h2>Contact Us</h2>
-            <form id="contact-form" novalidate>
-                <fieldset>
-                    <legend>Send us a message</legend>
-                    
-                    <label for="name">Name: <span class="required">*</span></label>
-                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
-            
-                    <label for="email">Email: <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-
-                    <label for="phone">Phone Number:</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" pattern="[0-9]{10}">
-            
-                    <label for="comments">Message:</label>
-                    <textarea id="comments" name="comments" rows="4" placeholder="How can we help?"></textarea>
-            
-                    <button type="submit">Send Message</button>
-                </fieldset>
-            </form>
-        </section>
-
-    </main>
+        </footer>
+    </div>
 
     <!-- Toast Notification Container -->
     <div id="toast-container" aria-live="polite"></div>
 
-    <footer>
-        <p>&copy; 2025 Jhola Shop. All rights reserved.</p>
-    </footer>
+    <!-- Achievement Popup -->
+    <div id="achievement-popup" class="achievement-popup hidden">
+        <div class="achievement-content">
+            <div class="achievement-icon">🏆</div>
+            <div class="achievement-text">
+                <div class="achievement-title">ACHIEVEMENT UNLOCKED!</div>
+                <div class="achievement-name" id="achievement-name">First Purchase</div>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
-
 </body>
 </html>

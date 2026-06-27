@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JHOLA_TERMINAL v2.0 - HACKCAT EDITION</title>
+    <title>JHOLA_TERMINAL v3.0 - HACKCAT EDITION</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&family=VT323&family=Silkscreen&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <meta name="description" content="JHOLA_TERMINAL - Your retro hacker shopping experience in Nepal.">
     <meta name="author" content="Jhola Shop Team">
-    <meta name="keywords" content="electronics, Nepal, shopping, retro, terminal, hacker">
+    <meta name="keywords" content="electronics, Nepal, shopping, retro, terminal, hacker, cyberpunk">
     <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
 </head>
 <body>
     <!-- CRT Overlay Effects -->
@@ -49,20 +51,37 @@
                 <span class="version">v2.0.1</span>
             </div>
             <nav class="terminal-nav">
-                <a href="#home" class="nav-item" data-key="01">[01] HOME_</a>
-                <a href="#product-list" class="nav-item" data-key="02">[02] SHOP_</a>
-                <a href="#quests" class="nav-item" data-key="03">[03] QUESTS_</a>
-                <a href="#deals" class="nav-item" data-key="04">[04] DEALS_</a>
-                <a href="#inventory" class="nav-item" data-key="05">[05] INVENTORY_</a>
-                <a href="#profile" class="nav-item" data-key="06">[06] PROFILE_</a>
+                <a href="#home" class="nav-item active" data-section="home"><i class="fas fa-home"></i> [01] HOME_</a>
+                <a href="#shop-layout" class="nav-item" data-section="shop"><i class="fas fa-store"></i> [02] SHOP_</a>
+                <a href="#orders-section" class="nav-item" data-section="orders"><i class="fas fa-box"></i> [03] ORDERS_</a>
+                <a href="#quests" class="nav-item" data-section="quests"><i class="fas fa-scroll"></i> [04] QUESTS_</a>
+                <a href="#deals" class="nav-item" data-section="deals"><i class="fas fa-bolt"></i> [05] DEALS_</a>
+                <a href="#inventory" class="nav-item" data-section="inventory"><i class="fas fa-backpack"></i> [06] INVENTORY_</a>
+                <a href="#profile" class="nav-item" data-section="profile"><i class="fas fa-user-astronaut"></i> [07] PROFILE_</a>
             </nav>
             <div class="status-right">
+                <div class="search-mini" id="mini-search-toggle" aria-label="Toggle search">
+                    <i class="fas fa-search"></i>
+                </div>
                 <div class="cart-indicator" id="cart-badge" aria-label="Cart items count">
-                    <span class="cart-icon">🛒</span>
+                    <i class="fas fa-shopping-cart cart-icon"></i>
                     <span class="cart-count" id="cart-count">0</span>
+                </div>
+                <div class="notifications-bell" id="notif-bell" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notif-dot hidden" id="notif-dot"></span>
                 </div>
             </div>
         </header>
+
+        <!-- Mini Search Bar -->
+        <div class="mini-search-bar hidden" id="mini-search-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="global-search-input" placeholder="SEARCH_ALL_PRODUCTS..." aria-label="Global search">
+                <button id="global-search-btn" aria-label="Search"><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
 
         <main class="terminal-desktop">
             <!-- Left Sidebar - Player Profile -->
@@ -228,11 +247,11 @@
                     </div>
                 </div>
 
-                <!-- Shop Layout -->
+                <!-- Shop Layout with Enhanced Features -->
                 <div id="shop-layout" class="terminal-section shop-section">
                     <div class="terminal-window product-terminal" id="product-list">
                         <div class="terminal-header">
-                            <span class="terminal-title">PRODUCT_INDEX.EXE</span>
+                            <span class="terminal-title"><i class="fas fa-store"></i> PRODUCT_INDEX.EXE</span>
                             <div class="terminal-controls">
                                 <span class="control-dot red"></span>
                                 <span class="control-dot yellow"></span>
@@ -240,33 +259,90 @@
                             </div>
                         </div>
                         <div class="terminal-body">
-                            <!-- Search and Sort Controls -->
-                            <div class="controls-container">
-                                <div class="search-box terminal-input">
-                                    <span class="prompt">></span>
+                            <!-- Enhanced Controls Container -->
+                            <div class="controls-container-enhanced">
+                                <!-- Search Box -->
+                                <div class="search-box-enhanced">
+                                    <span class="prompt"><i class="fas fa-chevron-right"></i></span>
                                     <input type="text" id="search-input" placeholder="SEARCH_PRODUCTS..." aria-label="Search products">
-                                    <button id="search-btn" class="pixel-btn-small" aria-label="Search">⌕</button>
+                                    <button id="search-btn" class="pixel-btn-icon" aria-label="Search"><i class="fas fa-search"></i></button>
                                 </div>
-                                <div class="sort-box">
-                                    <span class="sort-label">SORT_BY:</span>
+                                
+                                <!-- Sort Dropdown -->
+                                <div class="sort-box-enhanced">
+                                    <span class="sort-label"><i class="fas fa-sort"></i> SORT_BY:</span>
                                     <select id="sort-select" class="terminal-select" aria-label="Sort products">
                                         <option value="default">DEFAULT</option>
                                         <option value="price-low">PRICE_ASC</option>
                                         <option value="price-high">PRICE_DESC</option>
                                         <option value="name-asc">NAME_A-Z</option>
                                         <option value="name-desc">NAME_Z-A</option>
+                                        <option value="rating">TOP_RATED</option>
                                     </select>
+                                </div>
+
+                                <!-- View Toggle -->
+                                <div class="view-toggle">
+                                    <button class="view-btn active" data-view="grid" aria-label="Grid view"><i class="fas fa-th-large"></i></button>
+                                    <button class="view-btn" data-view="list" aria-label="List view"><i class="fas fa-list"></i></button>
                                 </div>
                             </div>
                             
-                            <!-- Category Filters as Pixel Folders -->
-                            <div id="filter-buttons" class="folder-tabs" role="group" aria-label="Category filters"></div>
+                            <!-- Category Filters as Pixel Folders with Icons -->
+                            <div class="categories-header">
+                                <span class="categories-title"><i class="fas fa-folder-open"></i> CATEGORY_INDEX:</span>
+                                <div id="filter-buttons" class="folder-tabs" role="group" aria-label="Category filters"></div>
+                            </div>
+
+                            <!-- Results Info -->
+                            <div class="results-info">
+                                <span id="results-count">0</span> PRODUCTS_FOUND
+                                <span class="divider">|</span>
+                                <span id="active-filter">ALL_CATEGORIES</span>
+                            </div>
 
                             <!-- Product Grid -->
                             <div id="container" class="inventory-grid">
                                 <div class="loading-state">
                                     <div class="matrix-loader"></div>
-                                    <p>LOADING_INVENTORY...</p>
+                                    <p><i class="fas fa-spinner fa-spin"></i> LOADING_INVENTORY...</p>
+                                </div>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="pagination-container hidden" id="pagination-container">
+                                <button class="page-btn" id="prev-page" aria-label="Previous page"><i class="fas fa-chevron-left"></i></button>
+                                <div class="page-numbers" id="page-numbers"></div>
+                                <button class="page-btn" id="next-page" aria-label="Next page"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Section (NEW) -->
+                <div id="orders-section" class="terminal-section orders-section">
+                    <div class="terminal-window orders-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-title"><i class="fas fa-box"></i> ORDER_HISTORY.LOG</span>
+                            <div class="terminal-controls">
+                                <span class="control-dot red"></span>
+                                <span class="control-dot yellow"></span>
+                                <span class="control-dot green"></span>
+                            </div>
+                        </div>
+                        <div class="terminal-body">
+                            <div class="orders-filters">
+                                <button class="order-filter-btn active" data-filter="all">ALL_ORDERS</button>
+                                <button class="order-filter-btn" data-filter="pending">PENDING</button>
+                                <button class="order-filter-btn" data-filter="completed">COMPLETED</button>
+                                <button class="order-filter-btn" data-filter="cancelled">CANCELLED</button>
+                            </div>
+                            <div id="orders-container" class="orders-container">
+                                <div class="empty-state">
+                                    <i class="fas fa-inbox empty-icon-large"></i>
+                                    <p>NO_ORDERS_FOUND</p>
+                                    <p class="empty-sub">Initialize your first purchase to view order history</p>
+                                    <a href="#shop-layout" class="pixel-btn"><span class="btn-text"><i class="fas fa-store"></i> START_SHOPPING</span></a>
                                 </div>
                             </div>
                         </div>
@@ -550,6 +626,32 @@
                 <div class="achievement-name" id="achievement-name">First Purchase</div>
             </div>
         </div>
+    </div>
+
+    <!-- Notifications Panel -->
+    <div id="notifications-panel" class="notifications-panel hidden">
+        <div class="terminal-window notifications-terminal">
+            <div class="terminal-header">
+                <span class="terminal-title"><i class="fas fa-bell"></i> NOTIFICATIONS.LOG</span>
+                <button class="close-notifications" id="close-notifications"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="terminal-body notifications-body">
+                <div id="notifications-list" class="notifications-list">
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash empty-icon-large"></i>
+                        <p>NO_NEW_NOTIFICATIONS</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Menu -->
+    <div id="quick-actions" class="quick-actions hidden">
+        <button class="quick-action-btn" data-action="wishlist"><i class="fas fa-heart"></i><span>WISHLIST</span></button>
+        <button class="quick-action-btn" data-action="compare"><i class="fas fa-exchange-alt"></i><span>COMPARE</span></button>
+        <button class="quick-action-btn" data-action="track"><i class="fas fa-shipping-fast"></i><span>TRACK_ORDER</span></button>
+        <button class="quick-action-btn" data-action="support"><i class="fas fa-headset"></i><span>SUPPORT</span></button>
     </div>
 
     <script src="script.js"></script>

@@ -97,7 +97,23 @@ const app = {
     calculateXP: function(basePrice) { return Math.floor(basePrice / 100); },
     calculateCoins: function(basePrice) { return Math.floor(basePrice / 200); },
     calculateTax: function(amount, taxRate) { return amount * taxRate; },
-    init: function() { this.loadCartFromStorage(); this.displayProducts("All"); this.setupFilters(); this.setupSearchAndSort(); this.setupEventListeners(); this.updateCartBadge(); this.updateCartDisplay(); this.handleInitialLoading(); },
+    init: function() { this.loadCartFromStorage(); this.displayProducts("All"); this.setupFilters(); this.setupSearchAndSort(); this.setupEventListeners(); this.setupNavigation(); this.updateCartBadge(); this.updateCartDisplay(); this.handleInitialLoading(); },
+    setupNavigation: function() {
+        const navItems = document.querySelectorAll('.terminal-nav .nav-item');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const targetId = item.getAttribute('href')?.slice(1);
+                const targetSection = document.getElementById(targetId);
+                if (!targetId || !targetSection) return;
+                e.preventDefault();
+                document.querySelectorAll('.terminal-nav .nav-item').forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.terminal-section').forEach(section => section.classList.remove('active'));
+                targetSection.classList.add('active');
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    },
     handleInitialLoading: function() {
         const loadingScreen = document.getElementById('loading-screen');
         const mainInterface = document.getElementById('main-interface');

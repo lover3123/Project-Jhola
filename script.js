@@ -97,32 +97,36 @@ const app = {
     calculateXP: function(basePrice) { return Math.floor(basePrice / 100); },
     calculateCoins: function(basePrice) { return Math.floor(basePrice / 200); },
     calculateTax: function(amount, taxRate) { return amount * taxRate; },
-    
-    getRarityColor: function(rarity) {
-        const colors = {
-            common: "#C9FFD7",
-            rare: "#00E5FF",
-            epic: "#FFD54A",
-            legendary: "#FF6B6B"
-        };
-        return colors[rarity] || "#C9FFD7";
-    },
-    
-    // Initialization
-    init: function() { 
-        this.loadFromStorage(); 
-        this.checkDailyLogin();
-        this.displayProducts("All"); 
-        this.setupFilters(); 
-        this.setupSearchAndSort(); 
-        this.setupEventListeners(); 
-        this.updateCartBadge(); 
-        this.updateCartDisplay();
-        this.updateUserProfile();
-        this.renderQuestBoard();
-        this.renderAchievements();
-        this.renderOrders();
-        this.playBootSequence();
+    init: function() { this.loadCartFromStorage(); this.displayProducts("All"); this.setupFilters(); this.setupSearchAndSort(); this.setupEventListeners(); this.updateCartBadge(); this.updateCartDisplay(); this.handleInitialLoading(); },
+    handleInitialLoading: function() {
+        const loadingScreen = document.getElementById('loading-screen');
+        const mainInterface = document.getElementById('main-interface');
+        const bootLog = document.getElementById('boot-log');
+        const loadingBar = document.getElementById('loading-bar');
+        const steps = [
+            'BOOT SECTOR CHECK... OK',
+            'LOADING ASSETS... OK',
+            'INITIALIZING TERMINAL... OK',
+            'SYNCING MARKETPLACE... OK',
+            'COMPLETE. WELCOME.'
+        ];
+        steps.forEach((text, index) => {
+            setTimeout(() => {
+                if (bootLog) {
+                    const line = document.createElement('div');
+                    line.className = 'boot-line';
+                    line.textContent = text;
+                    bootLog.appendChild(line);
+                }
+                if (loadingBar) {
+                    loadingBar.style.width = `${((index + 1) / steps.length) * 100}%`;
+                }
+            }, 300 * (index + 1));
+        });
+        setTimeout(() => {
+            if (loadingScreen) loadingScreen.classList.add('hidden');
+            if (mainInterface) mainInterface.classList.remove('hidden');
+        }, 300 * steps.length + 400);
     },
     setupFilters: function() { const categories = ["All", ...new Set(this.products.map(p => p.category))]; const filterContainer = document.getElementById("filter-buttons"); if(!filterContainer) return; filterContainer.innerHTML = ""; categories.forEach(cat => { const btn = document.createElement("button"); btn.textContent = cat; btn.setAttribute('aria-pressed', cat === "All" ? "true" : "false"); if (cat === "All") btn.classList.add('active'); btn.onclick = () => { document.querySelectorAll('#filter-buttons button').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); }); btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); this.currentFilter = cat; this.displayProducts(cat); }; filterContainer.appendChild(btn); }); },
     setupSearchAndSort: function() { const searchInput = document.getElementById('search-input'); const sortSelect = document.getElementById('sort-select'); if (searchInput) { searchInput.addEventListener('input', (e) => { this.searchQuery = e.target.value.toLowerCase(); this.displayProducts(this.currentFilter); }); } if (sortSelect) { sortSelect.addEventListener('change', (e) => { this.currentSort = e.target.value; this.displayProducts(this.currentFilter); }); } },

@@ -131,8 +131,232 @@ const app = {
     setupFilters: function() { const categories = ["All", ...new Set(this.products.map(p => p.category))]; const filterContainer = document.getElementById("filter-buttons"); if(!filterContainer) return; filterContainer.innerHTML = ""; categories.forEach(cat => { const btn = document.createElement("button"); btn.textContent = cat; btn.setAttribute('aria-pressed', cat === "All" ? "true" : "false"); if (cat === "All") btn.classList.add('active'); btn.onclick = () => { document.querySelectorAll('#filter-buttons button').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); }); btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); this.currentFilter = cat; this.displayProducts(cat); }; filterContainer.appendChild(btn); }); },
     setupSearchAndSort: function() { const searchInput = document.getElementById('search-input'); const sortSelect = document.getElementById('sort-select'); if (searchInput) { searchInput.addEventListener('input', (e) => { this.searchQuery = e.target.value.toLowerCase(); this.displayProducts(this.currentFilter); }); } if (sortSelect) { sortSelect.addEventListener('change', (e) => { this.currentSort = e.target.value; this.displayProducts(this.currentFilter); }); } },
     setupEventListeners: function() { document.querySelectorAll('.close-modal').forEach(btn => { btn.addEventListener('click', () => { this.closeModal('checkout-modal'); this.closeModal('product-modal'); }); }); window.addEventListener('click', (e) => { if (e.target.classList.contains('modal')) this.closeModal(e.target.id); }); const checkoutBtn = document.getElementById('checkout-btn'); if (checkoutBtn) checkoutBtn.addEventListener('click', () => this.openCheckout()); const clearCartBtn = document.getElementById('clear-cart-btn'); if (clearCartBtn) clearCartBtn.addEventListener('click', () => this.clearCart()); const checkoutForm = document.getElementById('checkout-form'); if (checkoutForm) checkoutForm.addEventListener('submit', (e) => this.handleCheckout(e)); const contactForm = document.getElementById('contact-form'); if (contactForm) contactForm.addEventListener('submit', (e) => this.handleContact(e)); const cartBadge = document.getElementById('cart-badge'); if (cartBadge) cartBadge.addEventListener('click', () => { document.getElementById('cart-section').scrollIntoView({ behavior: 'smooth' }); }); },
-    displayProducts: function(filterCategory) { const container = document.getElementById("container"); if (!container) return; container.innerHTML = ""; let filteredList = filterCategory === "All" ? this.products : this.products.filter(p => p.category === filterCategory); if (this.searchQuery) { filteredList = filteredList.filter(p => p.name.toLowerCase().includes(this.searchQuery) || p.description.toLowerCase().includes(this.searchQuery)); } switch(this.currentSort) { case 'price-low': filteredList.sort((a, b) => a.price - b.price); break; case 'price-high': filteredList.sort((a, b) => b.price - a.price); break; case 'name-asc': filteredList.sort((a, b) => a.name.localeCompare(b.name)); break; case 'name-desc': filteredList.sort((a, b) => b.name.localeCompare(a.name)); break; } if (filteredList.length === 0) { container.innerHTML = '<p>No products found.</p>'; return; } filteredList.forEach(product => { const card = document.createElement("article"); card.classList.add("product-card"); const oldPrice = product.price + 500; const buttonState = product.inStock ? "" : "disabled"; const buttonText = product.inStock ? "Add to Cart" : "Out of Stock"; card.innerHTML = '<figure><img src="' + product.image + '" alt="' + product.name + '" loading="lazy"><figcaption>' + product.category + '</figcaption></figure><h3>' + product.name + '</h3><div class="price-info"><span class="old-price">' + this.formatCurrency(oldPrice) + '</span><strong>' + this.formatCurrency(product.price) + '</strong></div><button class="add-to-cart-btn" data-product-id="' + product.id + '" ' + buttonState + '>' + buttonText + '</button><button class="view-details-btn" data-product-id="' + product.id + '">View Details</button>'; container.appendChild(card); }); document.querySelectorAll('.add-to-cart-btn').forEach(btn => { btn.addEventListener('click', (e) => { e.stopPropagation(); this.addToCart(parseInt(btn.getAttribute('data-product-id'))); }); }); document.querySelectorAll('.view-details-btn').forEach(btn => { btn.addEventListener('click', (e) => { e.stopPropagation(); this.showProductDetails(parseInt(btn.getAttribute('data-product-id'))); }); }); document.querySelectorAll('.product-card').forEach(card => { card.addEventListener('click', () => { const viewBtn = card.querySelector('.view-details-btn'); if (viewBtn) this.showProductDetails(parseInt(viewBtn.getAttribute('data-product-id'))); }); }); },
-    showProductDetails: function(productId) { const product = this.products.find(p => p.id === productId); if (!product) return; const modalBody = document.getElementById('product-modal-body'); const stockClass = product.inStock ? 'in-stock' : 'out-of-stock'; modalBody.innerHTML = '<img src="' + product.image + '" alt="' + product.name + '"><div class="product-modal-info"><h2>' + product.name + '</h2><p class="category">' + product.category + '</p><p class="price">' + this.formatCurrency(product.price) + '</p><span class="stock-status ' + stockClass + '">' + (product.inStock ? 'In Stock' : 'Out of Stock') + '</span><p class="description">' + product.description + '</p>' + (product.inStock ? '<button onclick="app.addToCart(' + product.id + '); app.closeModal(\'product-modal\')">Add to Cart</button>' : '') + '</div>'; this.openModal('product-modal'); },
+    displayProducts: function(filterCategory) { 
+        const container = document.getElementById("container"); 
+        if (!container) return; 
+        container.innerHTML = ""; 
+        
+        let filteredList = filterCategory === "All" ? this.products : this.products.filter(p => p.category === filterCategory); 
+        
+        if (this.searchQuery) { 
+            filteredList = filteredList.filter(p => p.name.toLowerCase().includes(this.searchQuery) || p.description.toLowerCase().includes(this.searchQuery)); 
+        } 
+        
+        switch(this.currentSort) { 
+            case 'price-low': filteredList.sort((a, b) => a.price - b.price); break; 
+            case 'price-high': filteredList.sort((a, b) => b.price - a.price); break; 
+            case 'name-asc': filteredList.sort((a, b) => a.name.localeCompare(b.name)); break; 
+            case 'name-desc': filteredList.sort((a, b) => b.name.localeCompare(a.name)); break; 
+        } 
+        
+        if (filteredList.length === 0) { 
+            container.innerHTML = '<div class="empty-state"><i class="fas fa-search empty-icon-large"></i><p>NO_PRODUCTS_FOUND</p><p class="empty-sub">Try adjusting your search or filter criteria</p></div>'; 
+            return; 
+        } 
+        
+        filteredList.forEach(product => { 
+            const card = document.createElement("article"); 
+            card.classList.add("product-card"); 
+            card.setAttribute('data-product-id', product.id);
+            
+            const discountPercent = product.discount || 0;
+            const hasDiscount = discountPercent > 0;
+            const oldPrice = hasDiscount ? Math.round(product.price / (1 - discountPercent/100)) : product.price + 500;
+            const stockStatus = product.inStock ? 'IN_STOCK' : 'OUT_OF_STOCK';
+            const stockClass = product.inStock ? 'in-stock' : 'out-of-stock';
+            
+            // Build rarity indicator
+            const rarityIcons = { common: '⬜', rare: '💎', epic: '🔮', legendary: '👑' };
+            const rarityIcon = rarityIcons[product.rarity] || '⬜';
+            
+            card.innerHTML = `
+                <div class="product-card-inner">
+                    <div class="product-image-wrapper">
+                        <div class="rarity-badge ${product.rarity}">${rarityIcon} ${product.rarity.toUpperCase()}</div>
+                        ${hasDiscount ? `<div class="discount-badge">-${discountPercent}%</div>` : ''}
+                        <img src="${product.image}" alt="${product.name}" loading="lazy" class="product-image">
+                        <div class="image-overlay">
+                            <button class="quick-view-btn pixel-btn-icon" data-product-id="${product.id}" aria-label="Quick View">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="wishlist-btn pixel-btn-icon" data-product-id="${product.id}" aria-label="Add to Wishlist">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">${product.category}</span>
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-rating">
+                            ${this.renderStars(product.rating)}
+                            <span class="rating-text">(${product.reviews})</span>
+                        </div>
+                        <div class="price-container">
+                            ${hasDiscount ? `<span class="old-price">${this.formatCurrency(oldPrice)}</span>` : ''}
+                            <span class="current-price">${this.formatCurrency(product.price)}</span>
+                        </div>
+                        <div class="rewards-row">
+                            <span class="xp-reward"><i class="fas fa-star"></i> +${product.xp} XP</span>
+                            <span class="coins-reward"><i class="fas fa-coins"></i> +${product.coins} COINS</span>
+                        </div>
+                        <div class="stock-status ${stockClass}">
+                            <i class="fas ${product.inStock ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                            <span>${stockStatus}</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="add-to-cart-btn pixel-btn ${!product.inStock ? 'disabled' : ''}" data-product-id="${product.id}" ${!product.inStock ? 'disabled' : ''}>
+                                <i class="fas fa-cart-plus"></i>
+                                <span class="btn-text">${product.inStock ? 'ADD_TO_CART' : 'OUT_OF_STOCK'}</span>
+                            </button>
+                            <button class="view-details-btn pixel-btn secondary" data-product-id="${product.id}">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="btn-text">DETAILS</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card); 
+        }); 
+        
+        // Attach event listeners
+        document.querySelectorAll('.add-to-cart-btn:not([disabled])').forEach(btn => { 
+            btn.addEventListener('click', (e) => { 
+                e.stopPropagation(); 
+                this.addToCart(parseInt(btn.getAttribute('data-product-id'))); 
+            }); 
+        }); 
+        
+        document.querySelectorAll('.view-details-btn, .quick-view-btn').forEach(btn => { 
+            btn.addEventListener('click', (e) => { 
+                e.stopPropagation(); 
+                this.showProductDetails(parseInt(btn.getAttribute('data-product-id'))); 
+            }); 
+        });
+        
+        document.querySelectorAll('.wishlist-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleWishlist(parseInt(btn.getAttribute('data-product-id')));
+            });
+        });
+        
+        document.querySelectorAll('.product-card').forEach(card => { 
+            card.addEventListener('click', () => { 
+                const viewBtn = card.querySelector('.view-details-btn'); 
+                if (viewBtn) this.showProductDetails(parseInt(viewBtn.getAttribute('data-product-id'))); 
+            }); 
+        }); 
+    },
+    
+    renderStars: function(rating) {
+        const fullStar = '<i class="fas fa-star"></i>';
+        const halfStar = '<i class="fas fa-star-half-alt"></i>';
+        const emptyStar = '<i class="far fa-star"></i>';
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= Math.floor(rating)) {
+                stars += fullStar;
+            } else if (i === Math.ceil(rating) && !Number.isInteger(rating)) {
+                stars += halfStar;
+            } else {
+                stars += emptyStar;
+            }
+        }
+        return stars;
+    },
+    
+    toggleWishlist: function(productId) {
+        const index = this.wishlist.indexOf(productId);
+        if (index === -1) {
+            this.wishlist.push(productId);
+            this.showToast('Added to wishlist!', 'success');
+        } else {
+            this.wishlist.splice(index, 1);
+            this.showToast('Removed from wishlist', 'info');
+        }
+    },
+    showProductDetails: function(productId) { 
+        const product = this.products.find(p => p.id === productId); 
+        if (!product) return; 
+        
+        const modalBody = document.getElementById('product-modal-body'); 
+        const stockClass = product.inStock ? 'in-stock' : 'out-of-stock';
+        const discountPercent = product.discount || 0;
+        const hasDiscount = discountPercent > 0;
+        const oldPrice = hasDiscount ? Math.round(product.price / (1 - discountPercent/100)) : product.price + 500;
+        const rarityIcons = { common: '⬜', rare: '💎', epic: '🔮', legendary: '👑' };
+        const rarityIcon = rarityIcons[product.rarity] || '⬜';
+        
+        modalBody.innerHTML = `
+            <div class="product-modal-image-wrapper">
+                <img src="${product.image}" alt="${product.name}" class="modal-product-image">
+                <div class="modal-rarity-badge ${product.rarity}">${rarityIcon} ${product.rarity.toUpperCase()}</div>
+                ${hasDiscount ? `<div class="modal-discount-badge">-${discountPercent}% OFF</div>` : ''}
+            </div>
+            <div class="product-modal-details">
+                <span class="modal-category">${product.category}</span>
+                <h2 class="modal-product-name">${product.name}</h2>
+                
+                <div class="modal-rating">
+                    ${this.renderStars(product.rating)}
+                    <span class="modal-rating-text">${product.rating}/5 (${product.reviews} reviews)</span>
+                </div>
+                
+                <div class="modal-price-container">
+                    ${hasDiscount ? `<span class="modal-old-price">${this.formatCurrency(oldPrice)}</span>` : ''}
+                    <span class="modal-current-price">${this.formatCurrency(product.price)}</span>
+                </div>
+                
+                <div class="modal-stock-status ${stockClass}">
+                    <i class="fas ${product.inStock ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                    <span>${product.inStock ? 'IN STOCK - Ready to Ship' : 'OUT OF STOCK'}</span>
+                </div>
+                
+                <p class="modal-description">${product.description}</p>
+                
+                <div class="modal-rewards-section">
+                    <div class="modal-reward-item">
+                        <i class="fas fa-star"></i>
+                        <span>EARN +${product.xp} XP</span>
+                    </div>
+                    <div class="modal-reward-item">
+                        <i class="fas fa-coins"></i>
+                        <span>EARN +${product.coins} COINS</span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="pixel-btn large add-to-cart-modal-btn ${!product.inStock ? 'disabled' : ''}" data-product-id="${product.id}" ${!product.inStock ? 'disabled' : ''}>
+                        <i class="fas fa-cart-plus"></i>
+                        <span class="btn-text">${product.inStock ? 'ADD_TO_CART' : 'OUT_OF_STOCK'}</span>
+                    </button>
+                    <button class="pixel-btn large secondary wishlist-modal-btn" data-product-id="${product.id}">
+                        <i class="far fa-heart"></i>
+                        <span class="btn-text">WISHLIST</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Attach event listeners for modal buttons
+        const addToCartBtn = modalBody.querySelector('.add-to-cart-modal-btn:not([disabled])');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', () => {
+                this.addToCart(product.id);
+                this.closeModal('product-modal');
+            });
+        }
+        
+        const wishlistBtn = modalBody.querySelector('.wishlist-modal-btn');
+        if (wishlistBtn) {
+            wishlistBtn.addEventListener('click', () => {
+                this.toggleWishlist(product.id);
+            });
+        }
+        
+        this.openModal('product-modal'); 
+    },
     addToCart: function(productId) { const product = this.products.find(p => p.id === productId); if (product && product.inStock) { const existingItem = this.cart.find(item => item.id === productId); if (existingItem) existingItem.quantity++; else this.cart.push({ ...product, quantity: 1 }); this.saveCartToStorage(); this.updateCartDisplay(); this.updateCartBadge(); this.showToast('Added ' + product.name + ' to cart!', 'success'); } },
     updateQuantity: function(index, change) { if (index < 0 || index >= this.cart.length) return; this.cart[index].quantity += change; if (this.cart[index].quantity <= 0) this.removeFromCart(index); else { this.saveCartToStorage(); this.updateCartDisplay(); this.updateCartBadge(); } },
     removeFromCart: function(index) { if (index < 0 || index >= this.cart.length) return; const itemName = this.cart[index].name; this.cart.splice(index, 1); this.saveCartToStorage(); this.updateCartDisplay(); this.updateCartBadge(); this.showToast('Removed ' + itemName + ' from cart', 'info'); },

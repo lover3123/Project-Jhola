@@ -1,21 +1,101 @@
 /* 
- * JHOLA SHOP APPLICATION - ENHANCED VERSION
+ * JHOLA TERMINAL SHOP APPLICATION - HACKCAT EDITION
+ * Retro Cyberpunk E-Commerce Experience
  */
 
 const app = {
+    // Comprehensive Product Catalog with Rarity, XP, Coins
     products: [
-        { id: 1, name: "Wireless Headphones", price: 3500, category: "Audio", inStock: true, image: "https://via.placeholder.com/250x200?text=Headphones", description: "Premium wireless headphones with noise cancellation." },
-        { id: 2, name: "Gaming Mouse", price: 1200, category: "Accessories", inStock: true, image: "https://via.placeholder.com/250x200?text=Mouse", description: "High-precision gaming mouse with RGB lighting." },
-        { id: 3, name: "Mechanical Keyboard", price: 4500, category: "Accessories", inStock: false, image: "https://via.placeholder.com/250x200?text=Keyboard", description: "Mechanical keyboard with Cherry MX switches." },
-        { id: 4, name: "USB-C Hub", price: 2000, category: "Accessories", inStock: true, image: "https://via.placeholder.com/250x200?text=USB+Hub", description: "7-in-1 USB-C hub with HDMI and SD reader." },
-        { id: 5, name: "Laptop Stand", price: 1500, category: "Furniture", inStock: true, image: "https://via.placeholder.com/250x200?text=Stand", description: "Ergonomic aluminum laptop stand." },
-        { id: 6, name: "Webcam 1080p", price: 3200, category: "Electronics", inStock: true, image: "https://via.placeholder.com/250x200?text=Webcam", description: "Full HD webcam with built-in microphone." }
+        // === ELECTRONICS ===
+        { id: 1, name: "Neon Gaming Headset", price: 4500, category: "Electronics", inStock: true, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop", description: "Premium wireless headset with RGB lighting and noise cancellation", rarity: "rare", xp: 45, coins: 15, rating: 4.8, reviews: 124, discount: 10 },
+        { id: 2, name: "Cyber Mechanical Keyboard", price: 6800, category: "Electronics", inStock: true, image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=300&fit=crop", description: "Cherry MX switches with customizable RGB per-key lighting", rarity: "epic", xp: 68, coins: 25, rating: 4.9, reviews: 89, discount: 0 },
+        { id: 3, name: "Quantum Mouse Pro", price: 2200, category: "Electronics", inStock: true, image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=300&fit=crop", description: "16000 DPI optical sensor with programmable buttons", rarity: "common", xp: 22, coins: 8, rating: 4.5, reviews: 256, discount: 15 },
+        { id: 4, name: "USB-C Hub 7-in-1", price: 2800, category: "Electronics", inStock: true, image: "https://images.unsplash.com/photo-1625842268584-8f3296236761?w=400&h=300&fit=crop", description: "HDMI, USB 3.0, SD/TF card reader, 100W PD charging", rarity: "common", xp: 28, coins: 10, rating: 4.6, reviews: 178, discount: 0 },
+        { id: 5, name: "4K Webcam Ultra", price: 5500, category: "Electronics", inStock: false, image: "https://images.unsplash.com/photo-1588167056675-12aed122bb23?w=400&h=300&fit=crop", description: "4K resolution at 30fps with auto-focus and dual mic", rarity: "rare", xp: 55, coins: 20, rating: 4.7, reviews: 92, discount: 0 },
+        { id: 6, name: "Portable SSD 1TB", price: 8900, category: "Electronics", inStock: true, image: "https://images.unsplash.com/photo-1628135899478-4407734b2450?w=400&h=300&fit=crop", description: "Ultra-fast NVMe SSD with USB 3.2 Gen 2 interface", rarity: "epic", xp: 89, coins: 30, rating: 4.9, reviews: 67, discount: 5 },
+        { id: 7, name: "Wireless Charger Pad", price: 1200, category: "Electronics", inStock: true, image: "https://images.unsplash.com/photo-1616349798282-8e1c0b2c0a2e?w=400&h=300&fit=crop", description: "15W fast wireless charging for Qi-enabled devices", rarity: "common", xp: 12, coins: 5, rating: 4.3, reviews: 312, discount: 20 },
+        { id: 8, name: "Smart Watch Elite", price: 12500, category: "Electronics", inStock: true, image: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400&h=300&fit=crop", description: "AMOLED display, heart rate monitor, GPS, 7-day battery", rarity: "legendary", xp: 125, coins: 50, rating: 4.8, reviews: 145, discount: 0 },
+        
+        // === FASHION ===
+        { id: 9, name: "Cyber Hoodie Black", price: 3200, category: "Fashion", inStock: true, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=300&fit=crop", description: "Oversized fit with reflective logo details", rarity: "rare", xp: 32, coins: 12, rating: 4.7, reviews: 203, discount: 0 },
+        { id: 10, name: "Pixel Art T-Shirt", price: 1500, category: "Fashion", inStock: true, image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop", description: "100% cotton with retro 8-bit graphic print", rarity: "common", xp: 15, coins: 6, rating: 4.4, reviews: 445, discount: 10 },
+        { id: 11, name: "Tech Cargo Pants", price: 4800, category: "Fashion", inStock: true, image: "https://images.unsplash.com/photo-1552160753-117159d741fc?w=400&h=300&fit=crop", description: "Water-resistant with multiple utility pockets", rarity: "rare", xp: 48, coins: 18, rating: 4.6, reviews: 167, discount: 0 },
+        { id: 12, name: "LED Sneakers", price: 5600, category: "Fashion", inStock: false, image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=300&fit=crop", description: "Light-up soles with USB rechargeable battery", rarity: "epic", xp: 56, coins: 22, rating: 4.5, reviews: 98, discount: 15 },
+        { id: 13, name: "Beanie Hacker Cap", price: 800, category: "Fashion", inStock: true, image: "https://images.unsplash.com/photo-1576871337632-b9aef4c17ab9?w=400&h=300&fit=crop", description: "Acrylic knit with embroidered terminal logo", rarity: "common", xp: 8, coins: 3, rating: 4.2, reviews: 521, discount: 0 },
+        { id: 14, name: "Denim Jacket Retro", price: 6200, category: "Fashion", inStock: true, image: "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=400&h=300&fit=crop", description: "Vintage wash with custom patches included", rarity: "rare", xp: 62, coins: 24, rating: 4.8, reviews: 134, discount: 0 },
+        
+        // === ACCESSORIES ===
+        { id: 15, name: "RGB Mouse Pad XL", price: 1800, category: "Accessories", inStock: true, image: "https://images.unsplash.com/photo-1615663245857-acda5b2b7618?w=400&h=300&fit=crop", description: "Extended size with 16.8M color RGB lighting", rarity: "common", xp: 18, coins: 7, rating: 4.6, reviews: 289, discount: 0 },
+        { id: 16, name: "Laptop Stand Aluminum", price: 2400, category: "Accessories", inStock: true, image: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=400&h=300&fit=crop", description: "Ergonomic design with heat dissipation", rarity: "common", xp: 24, coins: 9, rating: 4.7, reviews: 356, discount: 5 },
+        { id: 17, name: "Cable Management Kit", price: 600, category: "Accessories", inStock: true, image: "https://images.unsplash.com/photo-1629815034250-0e0e6c4d8c2a?w=400&h=300&fit=crop", description: "Complete set of clips, sleeves, and ties", rarity: "common", xp: 6, coins: 2, rating: 4.3, reviews: 678, discount: 0 },
+        { id: 18, name: "Monitor Light Bar", price: 3800, category: "Accessories", inStock: true, image: "https://images.unsplash.com/photo-1632515904960-3e9e1e0c8a5d?w=400&h=300&fit=crop", description: "Auto-dimming LED bar with remote control", rarity: "rare", xp: 38, coins: 14, rating: 4.8, reviews: 112, discount: 0 },
+        { id: 19, name: "Desk Organizer Set", price: 1400, category: "Accessories", inStock: true, image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop", description: "Minimalist design with pen holder and tray", rarity: "common", xp: 14, coins: 5, rating: 4.4, reviews: 234, discount: 10 },
+        { id: 20, name: "Bluetooth Speaker Mini", price: 2100, category: "Accessories", inStock: true, image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop", description: "Portable speaker with 12-hour battery life", rarity: "common", xp: 21, coins: 8, rating: 4.5, reviews: 445, discount: 0 },
+        
+        // === GAMING ===
+        { id: 21, name: "Gaming Chair Pro", price: 18500, category: "Gaming", inStock: true, image: "https://images.unsplash.com/photo-1598550476439-68477a568c74?w=400&h=300&fit=crop", description: "Ergonomic with lumbar support and recline function", rarity: "legendary", xp: 185, coins: 75, rating: 4.9, reviews: 78, discount: 0 },
+        { id: 22, name: "Controller Elite", price: 5200, category: "Gaming", inStock: true, image: "https://images.unsplash.com/photo-1593118247619-e2d6f056869e?w=400&h=300&fit=crop", description: "Customizable paddles and trigger stops", rarity: "epic", xp: 52, coins: 20, rating: 4.7, reviews: 156, discount: 0 },
+        { id: 23, name: "VR Headset Air", price: 24000, category: "Gaming", inStock: false, image: "https://images.unsplash.com/photo-1622979135225-d2ba269fb1bd?w=400&h=300&fit=crop", description: "Standalone VR with 128GB storage", rarity: "legendary", xp: 240, coins: 100, rating: 4.8, reviews: 45, discount: 0 },
+        { id: 24, name: "Racing Wheel Set", price: 15800, category: "Gaming", inStock: true, image: "https://images.unsplash.com/photo-1593305841991-05c29736f87e?w=400&h=300&fit=crop", description: "Force feedback wheel with pedal set", rarity: "epic", xp: 158, coins: 65, rating: 4.6, reviews: 34, discount: 10 },
+        { id: 25, name: "Gaming Glasses Blue Cut", price: 1800, category: "Gaming", inStock: true, image: "https://images.unsplash.com/photo-1577245423800-5d2947f7a8f6?w=400&h=300&fit=crop", description: "Anti-blue light with UV protection", rarity: "common", xp: 18, coins: 7, rating: 4.4, reviews: 267, discount: 0 },
+        
+        // === BOOKS ===
+        { id: 26, name: "Clean Code Book", price: 2200, category: "Books", inStock: true, image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&h=300&fit=crop", description: "A handbook of agile software craftsmanship", rarity: "rare", xp: 22, coins: 8, rating: 4.9, reviews: 892, discount: 0 },
+        { id: 27, name: "Design Patterns", price: 2800, category: "Books", inStock: true, image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop", description: "Elements of reusable object-oriented software", rarity: "rare", xp: 28, coins: 10, rating: 4.8, reviews: 567, discount: 5 },
+        { id: 28, name: "The Pragmatic Programmer", price: 2500, category: "Books", inStock: true, image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&h=300&fit=crop", description: "Your journey to mastery", rarity: "rare", xp: 25, coins: 9, rating: 4.9, reviews: 734, discount: 0 },
+        { id: 29, name: "JavaScript Guide", price: 1800, category: "Books", inStock: true, image: "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400&h=300&fit=crop", description: "Comprehensive guide to modern JS", rarity: "common", xp: 18, coins: 7, rating: 4.6, reviews: 423, discount: 0 },
+        { id: 30, name: "System Design Interview", price: 3200, category: "Books", inStock: true, image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&h=300&fit=crop", description: "An insider's guide to system design", rarity: "epic", xp: 32, coins: 12, rating: 4.8, reviews: 289, discount: 0 },
+        
+        // === HOME ===
+        { id: 31, name: "Smart LED Strip 5m", price: 1600, category: "Home", inStock: true, image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=300&fit=crop", description: "WiFi controlled RGB strip with music sync", rarity: "common", xp: 16, coins: 6, rating: 4.5, reviews: 512, discount: 15 },
+        { id: 32, name: "Mini Projector HD", price: 8500, category: "Home", inStock: true, image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop", description: "1080p portable projector with built-in speaker", rarity: "epic", xp: 85, coins: 35, rating: 4.6, reviews: 167, discount: 0 },
+        { id: 33, name: "Air Purifier Compact", price: 6800, category: "Home", inStock: true, image: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&h=300&fit=crop", description: "HEPA filter for rooms up to 300 sq ft", rarity: "rare", xp: 68, coins: 28, rating: 4.7, reviews: 234, discount: 0 },
+        { id: 34, name: "Digital Alarm Clock", price: 1200, category: "Home", inStock: true, image: "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=400&h=300&fit=crop", description: "LED display with temperature and USB charging", rarity: "common", xp: 12, coins: 5, rating: 4.3, reviews: 389, discount: 0 },
+        { id: 35, name: "Plant Pot Smart", price: 2400, category: "Home", inStock: false, image: "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=400&h=300&fit=crop", description: "Self-watering with moisture sensor", rarity: "rare", xp: 24, coins: 9, rating: 4.4, reviews: 156, discount: 0 },
+        
+        // === SPORTS ===
+        { id: 36, name: "Yoga Mat Premium", price: 2200, category: "Sports", inStock: true, image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=400&h=300&fit=crop", description: "Non-slip surface with alignment lines", rarity: "common", xp: 22, coins: 8, rating: 4.6, reviews: 445, discount: 0 },
+        { id: 37, name: "Resistance Bands Set", price: 1400, category: "Sports", inStock: true, image: "https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=400&h=300&fit=crop", description: "5 levels of resistance with door anchor", rarity: "common", xp: 14, coins: 5, rating: 4.5, reviews: 567, discount: 10 },
+        { id: 38, name: "Smart Jump Rope", price: 1800, category: "Sports", inStock: true, image: "https://images.unsplash.com/photo-1599058945522-28d584b6f0ff?w=400&h=300&fit=crop", description: "Counts calories and jumps with app sync", rarity: "common", xp: 18, coins: 7, rating: 4.4, reviews: 234, discount: 0 },
+        { id: 39, name: "Foam Roller Pro", price: 1600, category: "Sports", inStock: true, image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d87?w=400&h=300&fit=crop", description: "High-density foam for muscle recovery", rarity: "common", xp: 16, coins: 6, rating: 4.7, reviews: 312, discount: 0 },
+        { id: 40, name: "Water Bottle Insulated", price: 1200, category: "Sports", inStock: true, image: "https://images.unsplash.com/photo-1602143407151-01114192003f?w=400&h=300&fit=crop", description: "Keeps drinks cold for 24h, hot for 12h", rarity: "common", xp: 12, coins: 5, rating: 4.6, reviews: 678, discount: 0 }
     ],
+    
+    // User Profile & Gamification State
+    user: {
+        level: 1,
+        xp: 0,
+        xpToNextLevel: 100,
+        coins: 100,
+        streak: 1,
+        lastLogin: null,
+        achievements: [],
+        quests: [
+            { id: "FIRST_PURCHASE", name: "First Purchase", description: "Complete your first order", reward: 50, completed: false },
+            { id: "CART_EXPLORER", name: "Cart Explorer", description: "Add 5 items to cart", reward: 25, completed: false },
+            { id: "CATEGORY_MASTER", name: "Category Master", description: "Browse all categories", reward: 30, completed: false },
+            { id: "REVIEW_WRITER", name: "Review Writer", description: "Write a product review", reward: 20, completed: false },
+            { id: "LOYAL_CUSTOMER", name: "Loyal Customer", description: "7-day login streak", reward: 100, completed: false }
+        ],
+        badges: []
+    },
+    
     cart: [],
+    orders: [],
+    wishlist: [],
     currentFilter: "All",
     currentSort: "default",
     searchQuery: "",
+    viewMode: "grid", // grid or list
+    currentPage: 1,
+    itemsPerPage: 8,
+    notifications: [],
+    
+    // Utility Functions
     formatCurrency: (amount) => "Rs. " + amount.toLocaleString(),
+    
+    calculateXP: function(basePrice) { return Math.floor(basePrice / 100); },
+    calculateCoins: function(basePrice) { return Math.floor(basePrice / 200); },
     calculateTax: function(amount, taxRate) { return amount * taxRate; },
     init: function() { this.loadCartFromStorage(); this.displayProducts("All"); this.setupFilters(); this.setupSearchAndSort(); this.setupEventListeners(); this.updateCartBadge(); this.updateCartDisplay(); this.handleInitialLoading(); },
     handleInitialLoading: function() {
